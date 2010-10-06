@@ -25,5 +25,10 @@
 			<type>2</type>
 			<location>D:/Programming/Java/Verteilte Systeme/dslab1/src</location>
 		</link>
+		<link>
+			<name>src/client</name>
+			<type>2</type>
+			<location>D:/Programming/Java/dslab1/src/client</location>
+		</link>
 	</linkedResources>
 </projectDescription>

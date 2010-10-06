@@ -52,10 +52,10 @@
     </target>
     
     <target name="run-client" depends="compile" description="Run client.">
-        <java classname="your.Client" fork="true" classpathref="project.classpath">
+        <java classname="client.FDS_Client" fork="true" classpathref="project.classpath">
             <arg value="your/downloadDir" /><!-- downloadDir -->
             <arg value="localhost" /><!-- proxyHost -->
-            <arg value="10000 + dslabXXX * 10" /><!-- proxyTCPPort -->
+            <arg value="10540" /><!-- proxyTCPPort -->
         </java>
     </target>
     
