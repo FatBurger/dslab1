@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="dslab1" default="compile" basedir=".">
+    
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    
+    <path id="project.classpath" >
+        <pathelement location="${build.dir}"/>
+    </path>
+    
+    <target name="compile" description="Compile project.">
+        <mkdir dir="${build.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}"
+               classpathref="project.classpath"
+               debug="true" deprecation="true"
+               includeantruntime="false"/>
+        <copy todir="${build.dir}">
+            <fileset dir="${src.dir}">
+                <include name="*.properties" />
+            </fileset>
+        </copy>
+    </target>
+	
+	<target name="run-proxy" depends="compile" description="Run proxy.">
+	    <java classname="your.Proxy" fork="true" classpathref="project.classpath">
+	        <arg value="10000 + dslabXXX * 10"/><!-- tcpPort -->
+	        <arg value="10000 + dslabXXX * 10 + 1" /><!-- udpPort -->
+	        <arg value="3000"/><!-- fileserverTimeout -->
+	        <arg value="1000"/><!-- checkPeriod -->
+	    </java>
+	</target>
+    
+    <target name="run-fileserver1" depends="compile" description="Run 1st fileserver.">
+        <java classname="your.Fileserver" fork="true" classpathref="project.classpath">
+        	<arg value="your/sharedFilesDir"/><!-- sharedFilesDir -->
+        	<arg value="10000 + dslabXXX * 10 + 2"/><!-- tcpPort -->
+        	<arg value="localhost"/><!-- proxyHost -->
+            <arg value="10000 + dslabXXX * 10 + 1"/><!-- proxyUDPPort -->
+            <arg value="1000"/><!-- alivePeriod -->
+        </java>
+    </target>
+	
+    <target name="run-fileserver2" depends="compile" description="Run 2nd fileserver.">
+        <java classname="your.Fileserver" fork="true" classpathref="project.classpath">
+        	<arg value="your/sharedFilesDir2"/><!-- sharedFilesDir -->
+        	<arg value="10000 + dslabXXX * 10 + 3"/><!-- tcpPort -->
+        	<arg value="localhost"/><!-- proxyHost -->
+            <arg value="10000 + dslabXXX * 10 + 1"/><!-- proxyUDPPort -->
+            <arg value="1000"/><!-- alivePeriod -->
+        </java>
+    </target>
+    
+    <target name="run-client" depends="compile" description="Run client.">
+        <java classname="your.Client" fork="true" classpathref="project.classpath">
+            <arg value="your/downloadDir" /><!-- downloadDir -->
+            <arg value="localhost" /><!-- proxyHost -->
+            <arg value="10000 + dslabXXX * 10" /><!-- proxyTCPPort -->
+        </java>
+    </target>
+    
+    <target name="clean" description="Clean build products.">
+        <delete dir="${build.dir}"/>
+    </target>
+    
+    <target name="rebuild" depends="clean, compile" description="Clean and build products." />
+</project>
