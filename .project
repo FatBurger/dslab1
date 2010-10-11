@@ -30,5 +30,15 @@
 			<type>2</type>
 			<location>D:/Programming/Java/dslab1/src/client</location>
 		</link>
+		<link>
+			<name>src/commandHandling</name>
+			<type>2</type>
+			<location>D:/Programming/Java/dslab1/src/commandHandling</location>
+		</link>
+		<link>
+			<name>src/client/commands</name>
+			<type>2</type>
+			<location>D:/Programming/Java/dslab1/src/client/commands</location>
+		</link>
 	</linkedResources>
 </projectDescription>
