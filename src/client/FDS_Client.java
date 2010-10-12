@@ -30,7 +30,7 @@ public class FDS_Client
       // parse command line arguments
       Arguments parsedArguments = new Arguments(args);
       
-      // initialize the proxy connection
+      // initialize the proxy connection with values arguments
       connection = new ProxyConnection(parsedArguments.getHostname(), parsedArguments.getPort());
       
       // start listening for messages from the proxy
@@ -38,7 +38,7 @@ public class FDS_Client
       
       // register known console commands and start command handling
       RegisterCommands();
-      StartCommandHandling();
+      commandHandler.StartListening();
    }
    
    /**
@@ -47,7 +47,7 @@ public class FDS_Client
    private static void StartProxyListener()
    {
       // create a new proxy listener
-      ProxyListener listener = new ProxyListener(commandHandler, connection);
+      ProxyConnectionHandler listener = new ProxyConnectionHandler(commandHandler, connection);
       
       // run as a thread
       Thread listenerThread = new Thread(listener);
@@ -63,17 +63,8 @@ public class FDS_Client
       ProxyCommand proxyCommand = new ProxyCommand(connection.GetOutputStream());
       commandHandler.RegisterDefaultCommand(proxyCommand);
       
-      // register the exit command
+      // register the exit command - will perform special logic
       ExitCommand exitCommand = new ExitCommand(commandHandler, connection);
       commandHandler.RegisterCommand(exitCommand.getIdentifier(), exitCommand);
-   }
-   
-   /**
-    * Starts handling the console commands.
-    */
-   private static void StartCommandHandling()
-   {     
-      // start listening for commands (will block until stopListening() is called
-      commandHandler.StartListening();
    }
 }

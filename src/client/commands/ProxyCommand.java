@@ -2,6 +2,8 @@ package client.commands;
 
 import java.io.*;
 
+import protocols.MessageFileProtocol;
+
 import commandHandling.ICommand;
 
 /**
@@ -15,12 +17,12 @@ public class ProxyCommand implements ICommand
     * The command delimiter.
     */
    private final String COMMAND_DELIMITER = " ";
-   
-   /**
-    * The output printer.
-    */
-   private final PrintWriter outputPrinter;
 
+   /**
+    * The protocol object.
+    */
+   private final MessageFileProtocol protocol;
+   
    /**
     * Creates a new ProxyCommand instance.
     * 
@@ -29,7 +31,7 @@ public class ProxyCommand implements ICommand
     */
    public ProxyCommand(OutputStream outputStream)
    {
-      outputPrinter = new PrintWriter(outputStream, true);
+      protocol = new MessageFileProtocol(outputStream);
    }
 
    /**
@@ -55,7 +57,7 @@ public class ProxyCommand implements ICommand
          // COMMAND_DELIMITER
          String restoredCommand = command.toString().substring(0,
                   command.length() - 1);
-         outputPrinter.println(restoredCommand);
+         protocol.WriteText(restoredCommand);
       }
    }
 

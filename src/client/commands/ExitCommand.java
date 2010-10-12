@@ -1,5 +1,8 @@
 package client.commands;
 
+
+import protocols.MessageFileProtocol;
+
 import client.ProxyConnection;
 import commandHandling.ICommand;
 import commandHandling.ICommandHandler;
@@ -27,6 +30,11 @@ public class ExitCommand implements ICommand
    private final ProxyConnection connection;
    
    /**
+    * The protocol object.
+    */
+   private final MessageFileProtocol protocol;
+   
+   /**
     * Constructor.
     * 
     * @param commandHandler Command handler that will be stopped when this
@@ -39,6 +47,8 @@ public class ExitCommand implements ICommand
    {
       this.commandHandler = commandHandler;
       this.connection = connection;
+      protocol = new MessageFileProtocol(connection.GetOutputStream());
+      
    }
    
    /**
@@ -60,7 +70,10 @@ public class ExitCommand implements ICommand
    {
       if (parameters.length == 0)
       {
-         // stop command handling
+         // send exit to proxy to indicate the user is offline now
+         SendExitMessage();
+         
+         // now stop command handling and close the proxy connection
          commandHandler.StopListening();
          connection.Disconnect();
          System.out.println("Exit success!");
@@ -69,5 +82,13 @@ public class ExitCommand implements ICommand
       {
          System.out.println("Wrong parameters - Usage: !exit");
       }
+   }
+   
+   /**
+    * Sends an exit message to the proxy.
+    */
+   private void SendExitMessage()
+   {
+      protocol.WriteText(COMMAND);
    }
 }

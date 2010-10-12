@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" output="build" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="con" path="D:/Programming/Java/Verteilte Systeme/dslab1/build"/>
-	<classpathentry kind="output" path="build"/>
+	<classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
+	<classpathentry kind="con" path="D:/Programming/Java/dslab1/build"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -35,5 +35,12 @@ public interface ICommandHandler
     * The currently executed command will be finished.
     */
    public void StopListening();
+   
+   /**
+    * Handles a command with having to read from a stream;
+    * 
+    * @param command The command to handle.
+    */
+   void HandleCommand(String command);
 
 }

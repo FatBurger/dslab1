@@ -47,6 +47,11 @@ public class Arguments
       {
          Usage();
       }
+      
+      if (port < 1 || port > 65535)
+      {
+         Usage();
+      }
    }
    
    /**

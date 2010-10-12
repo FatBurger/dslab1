@@ -79,6 +79,9 @@ public class ProxyConnection
          e.printStackTrace();
          System.exit(1);
       }
+
+      System.out.println("Connected to " + hostname + ":" + port + ", local port: "
+                                         + connection.getLocalPort() + "!");
    }
 
    /**
@@ -106,22 +109,21 @@ public class ProxyConnection
     */
    public void Disconnect()
    {
-      try
+      if (!connection.isClosed())
       {
-         if (!connection.isClosed())
+         try
          {
             outputStream.close();
             inputStream.close();
             connection.close();
-            
+
             System.out.println("Closed connection resources succesfully!");
          }
-      }
-      catch (IOException e)
-      {
-         System.out.println("Could not close resources!");
-         e.printStackTrace();
-         System.exit(1);
+         catch (IOException e)
+         {
+            System.out.println("Could not close proxy connection resources!");
+            e.printStackTrace();
+         }
       }
    }
 }

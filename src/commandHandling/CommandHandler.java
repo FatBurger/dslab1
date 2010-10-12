@@ -17,9 +17,14 @@ public class CommandHandler implements ICommandHandler
    private final String COMMAND_DELIMITER = " ";
    
    /**
-    * The stream to listen on for commands.
+    * Encapsulates the stream to listen on for commands.
     */
-   private final InputStream inputStream;
+   private BufferedReader inputReader;
+   
+   /**
+    * Input stream reference.
+    */
+   private InputStream inputStream;
    
    /**
     * Indicates that listening to commands takes place currently.
@@ -68,28 +73,58 @@ public class CommandHandler implements ICommandHandler
    public CommandHandler(InputStream inputStream)
    {
       this.inputStream = inputStream;
+      inputReader = new BufferedReader(new InputStreamReader(inputStream));
+   }
+   
+   /**
+    * Creates a new CommandHandler that does not
+    * listen on a stream.
+    */
+   public CommandHandler()
+   {
    }
    
    /**
     * Starts listening to registered
     * on input stream.
     */
-   public void StartListening() throws IllegalStateException
+   public void StartListening()
    {
       isRunning = true;
-      
-      Scanner consoleInput = new Scanner(inputStream);
       
       // execute until the program gets terminated externally via StopListening()
       while (isRunning)
       {
-         // read one line from stream, split along COMMAND_DELIMITER
-         String inputLine = consoleInput.nextLine();
-         String[] tokens = inputLine.split(COMMAND_DELIMITER);
+         try
+         {
+            // read one line from stream, split along COMMAND_DELIMITER
+            String inputLine = inputReader.readLine();
+            String[] tokens = inputLine.split(COMMAND_DELIMITER);
          
-         // validate the parsed input
-         validateInput(tokens);
+            // validate the parsed input
+            validateInput(tokens);
+         }
+         catch (IOException e)
+         {
+            // close resources and let the thread time out
+            System.out.println("<CommandHandler>: Input stream was closed, stopping to read!");
+            isRunning = false;
+         }
       }
+   }
+   
+   /**
+    * Handles a command with having to read from a stream;
+    * 
+    * @param command The command to handle.
+    */
+   public void HandleCommand(String command)
+   {
+      // split the command up into its tokens
+      String[] tokens = command.split(COMMAND_DELIMITER);
+      
+      // validate the parsed input
+      validateInput(tokens);
    }
 
    /**
@@ -129,6 +164,26 @@ public class CommandHandler implements ICommandHandler
     */
    public void StopListening()
    {
+      // close the input stream to trigger an IOException in the reading loop
+      try
+      {
+         if (inputStream == System.in)
+         {
+            // system.in cannot be closed, therefore we have no way
+            // to trigger an IOException - we have to rely on the user
+            // to unblock the "inputReader.readLine()" by pressing enter
+            System.out.println("Press <ENTER> to terminate");
+         }
+         else
+         {
+            inputStream.close();
+         }
+      }
+      catch (IOException e)
+      {
+         System.out.println("Could not close input stream!");
+         e.printStackTrace();
+      }
       isRunning = false;
    }
 }

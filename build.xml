@@ -23,9 +23,9 @@
     </target>
 	
 	<target name="run-proxy" depends="compile" description="Run proxy.">
-	    <java classname="your.Proxy" fork="true" classpathref="project.classpath">
-	        <arg value="10000 + dslabXXX * 10"/><!-- tcpPort -->
-	        <arg value="10000 + dslabXXX * 10 + 1" /><!-- udpPort -->
+	    <java classname="proxy.FDS_Proxy" fork="true" classpathref="project.classpath">
+	        <arg value="10540"/><!-- tcpPort -->
+	        <arg value="10541" /><!-- udpPort -->
 	        <arg value="3000"/><!-- fileserverTimeout -->
 	        <arg value="1000"/><!-- checkPeriod -->
 	    </java>
@@ -54,8 +54,8 @@
     <target name="run-client" depends="compile" description="Run client.">
         <java classname="client.FDS_Client" fork="true" classpathref="project.classpath">
             <arg value="your/downloadDir" /><!-- downloadDir -->
-            <arg value="stockholm.vitalab.tuwien.ac.at" /><!-- proxyHost -->
-            <arg value="9000" /><!-- proxyTCPPort -->
+            <arg value="localhost" /><!-- proxyHost -->
+            <arg value="10540" /><!-- proxyTCPPort -->
         </java>
     </target>
     
