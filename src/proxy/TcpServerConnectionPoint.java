@@ -30,7 +30,7 @@ public class TcpServerConnectionPoint
       catch (IOException e)
       {
          System.out.println("Could not get I/O on port " + port + "!");
-         e.printStackTrace();
+         StopListening();
          System.exit(1);
       }
       
@@ -54,7 +54,6 @@ public class TcpServerConnectionPoint
       catch (IOException e)
       {
          System.out.println("Could not close TCP server socket!");
-         e.printStackTrace();
       }
    }
    

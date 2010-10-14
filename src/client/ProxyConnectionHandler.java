@@ -67,35 +67,46 @@ public class ProxyConnectionHandler implements Runnable
          {
             // read next protocol element
             ProtocolMessage readResult = protocol.ReadMessage();
-            MessageType type = readResult.getResultType();
             
-            // perform action depending on result type
-            if (type == MessageType.Console)
-            {
-               System.out.println(readResult.getContent());
-            }
-            else if (type == MessageType.File)
-            {
-               WriteToFile(readResult.getFileName(), readResult.getContent());
-            }
-            else if (type == MessageType.ForceLogoff)
-            {
-               // close resources and let the thread time out
-               connection.Disconnect();
-               commandHandler.StopListening();
-               isRunning = false;
-               System.out.println("<ProxyConnectionHandler Thread>: Received force logoff message, terminating!");
-            }
+            // perform action depending on result
+            PerformAction(readResult);
          }
          catch (IOException e)
          {
             // close resources and let the thread time out
+            System.out.println("<ProxyConnectionHandler Thread>: Input stream was closed, terminating!");
             connection.Disconnect();
             commandHandler.StopListening();
             isRunning = false;
-            System.out.println("<ProxyConnectionHandler Thread>: Input stream was closed, terminating!");
          }
       } 
+   }
+   
+   /**
+    * Performs an action depending specific to the given protocol message.
+    * 
+    * @param message The protocol message.
+    */
+   private void PerformAction(ProtocolMessage message)
+   {
+      MessageType type = message.getResultType();
+      
+      if (type == MessageType.Console)
+      {
+         System.out.println(message.getContent());
+      }
+      else if (type == MessageType.File)
+      {
+         WriteToFile(message.getFileName(), message.getContent());
+      }
+      else if (type == MessageType.ForceLogoff)
+      {
+         // close resources and let the thread time out
+         System.out.println("<ProxyConnectionHandler Thread>: Received force logoff message, terminating!");
+         connection.Disconnect();
+         commandHandler.StopListening();
+         isRunning = false;
+      }
    }
    
    /**

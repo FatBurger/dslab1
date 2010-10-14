@@ -32,6 +32,11 @@ public class CommandHandler implements ICommandHandler
    private Boolean isRunning = false;
    
    /**
+    * Indicates if this instance is currently blocked (waiting for input).
+    */
+   private boolean blocked;
+   
+   /**
     * Stores all registered keywords with their associated command executor object.
     */
    private Map<String, ICommand> registeredCommands = new HashMap<String, ICommand>();
@@ -98,11 +103,16 @@ public class CommandHandler implements ICommandHandler
          try
          {
             // read one line from stream, split along COMMAND_DELIMITER
+            blocked = true;
             String inputLine = inputReader.readLine();
-            String[] tokens = inputLine.split(COMMAND_DELIMITER);
+            blocked = false;
+            if (inputLine != null)
+            {
+               String[] tokens = inputLine.split(COMMAND_DELIMITER);
          
-            // validate the parsed input
-            validateInput(tokens);
+               // validate the parsed input
+               validateInput(tokens);
+            }
          }
          catch (IOException e)
          {
@@ -167,12 +177,12 @@ public class CommandHandler implements ICommandHandler
       // close the input stream to trigger an IOException in the reading loop
       try
       {
-         if (inputStream == System.in)
+         if (inputStream == System.in && blocked)
          {
             // system.in cannot be closed, therefore we have no way
             // to trigger an IOException - we have to rely on the user
             // to unblock the "inputReader.readLine()" by pressing enter
-            System.out.println("Press <ENTER> to terminate");
+            System.out.println("Press <ENTER> to terminate!");
          }
          else
          {

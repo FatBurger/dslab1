@@ -44,14 +44,14 @@ public class ProxyConnection
       {
          System.out.println("Could not create socket for host " + hostname
                   + " on port " + port + "!");
-         e.printStackTrace();
+         Disconnect();
          System.exit(1);
       }
       catch (IOException e)
       {
          System.out.println("Could not get I/O for host " + hostname
                   + " on port " + port + "!");
-         e.printStackTrace();
+         Disconnect();
          System.exit(1);
       }
 
@@ -64,7 +64,7 @@ public class ProxyConnection
       {
          System.out.println("Could not get input stream for host " + hostname
                   + " on port " + port + "!");
-         e.printStackTrace();
+         Disconnect();
          System.exit(1);
       }
 
@@ -76,12 +76,12 @@ public class ProxyConnection
       {
          System.out.println("Could not get output stream for host " + hostname
                   + " on port " + port + "!");
-         e.printStackTrace();
+         Disconnect();
          System.exit(1);
       }
 
-      System.out.println("Connected to " + hostname + ":" + port + ", local port: "
-                                         + connection.getLocalPort() + "!");
+      System.out.println("Connected to " + hostname + ":" + port
+               + ", local port: " + connection.getLocalPort() + "!");
    }
 
    /**
@@ -109,21 +109,41 @@ public class ProxyConnection
     */
    public void Disconnect()
    {
-      if (!connection.isClosed())
+      try
       {
-         try
+         if (outputStream != null)
          {
             outputStream.close();
-            inputStream.close();
-            connection.close();
-
-            System.out.println("Closed connection resources succesfully!");
          }
-         catch (IOException e)
+      }
+      catch (IOException e)
+      {
+         System.out.println("Could not close proxy connection output stream!");
+      }
+      
+      try
+      {
+         if (inputStream != null)
          {
-            System.out.println("Could not close proxy connection resources!");
-            e.printStackTrace();
+            inputStream.close();
          }
+      }
+      catch (IOException e)
+      {
+         System.out.println("Could not close proxy connection input stream!");
+      }
+      
+      try
+      {
+         if (connection != null && !connection.isClosed())
+         {
+            connection.close();
+            System.out.println("Closed proxy connection resources succesfully!");
+         }
+      }
+      catch (IOException e)
+      {
+         System.out.println("Could not close proxy connection socket!");
       }
    }
 }

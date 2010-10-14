@@ -46,7 +46,7 @@ public class TcpConnection
          System.out.println("Could not get input stream for host " 
                   + socket.getInetAddress().getCanonicalHostName()
                   + " on port " + socket.getPort() + "!");
-         e.printStackTrace();
+         Disconnect();
          System.exit(1);
       }
 
@@ -59,7 +59,7 @@ public class TcpConnection
          System.out.println("Could not get output stream for host "
                   + socket.getInetAddress().getCanonicalHostName()
                   + " on port " + socket.getPort() + "!");
-         e.printStackTrace();
+         Disconnect();
          System.exit(1);
       }
 
@@ -92,21 +92,41 @@ public class TcpConnection
     */
    public void Disconnect()
    {
-      if (!connection.isClosed())
+      try
       {
-         try
+         if (outputStream != null)
          {
             outputStream.close();
+         }
+      }
+      catch (IOException e)
+      {
+         System.out.println("<TcpConnectionListener Thread>: Could not close TCP connection output stream!");
+      }
+      
+      try
+      {
+         if (inputStream != null)
+         {
             inputStream.close();
+         }
+      }
+      catch (IOException e)
+      {
+         System.out.println("<TcpConnectionListener Thread>: Could not close TCP connection input stream!");
+      }
+      
+      try
+      {
+         if (connection != null && !connection.isClosed())
+         {
             connection.close();
-
             System.out.println("<TcpConnectionListener Thread>: Closed connection resources succesfully!");
          }
-         catch (IOException e)
-         {
-            System.out.println("<TcpConnectionListener Thread>: Could not close proxy connection resources!");
-            e.printStackTrace();
-         }
+      }
+      catch (IOException e)
+      {
+         System.out.println("<TcpConnectionListener Thread>: Could not close TCP connection socket!");
       }
    }
 }

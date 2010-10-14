@@ -30,6 +30,11 @@ public class TcpConnectionListener implements Runnable
    private final TcpServerConnectionPoint tcpServer;
    
    /**
+    * Thread pool that provides threads that run incoming requests.
+    */
+   private final ExecutorService threadPool;
+   
+   /**
     * User manager reference.
     */
    private final UserManager userManager;
@@ -51,6 +56,9 @@ public class TcpConnectionListener implements Runnable
    {
       this.tcpServer = connection;
       this.userManager = userManager;
+      
+      // create a new cached thread pool
+      threadPool = Executors.newCachedThreadPool();
    }
    
    /**
@@ -59,9 +67,6 @@ public class TcpConnectionListener implements Runnable
    public void run()
    {
       isRunning = true;
-      
-      // create a new cached thread pool
-      ExecutorService threadPool = Executors.newCachedThreadPool();
       
       while (isRunning)
       {
@@ -80,7 +85,7 @@ public class TcpConnectionListener implements Runnable
          catch (IOException e)
          {
             isRunning = false;
-            threadPool.shutdown();
+            CloseAllConnections();
             System.out.println("<ClientConnectionListener Thread>: Server socket was closed, terminating!");
          }
       }    
@@ -90,7 +95,9 @@ public class TcpConnectionListener implements Runnable
     * Closes all active connections.
     */
    public void CloseAllConnections()
-   {  
+   {
+      threadPool.shutdown();
+      isRunning = false;
       lock.lock();
       for (TcpConnection connection : activeConnections)
       {
