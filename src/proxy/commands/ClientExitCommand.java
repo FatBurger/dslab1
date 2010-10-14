@@ -64,7 +64,7 @@ public class ClientExitCommand implements ICommand
          {
             // user was logged in - log off
             user.Logout();
-            System.out.println("<TcpConnectionHandler Thread>: User " + user.getName() + "logged off!");
+            System.out.println("<TcpConnectionHandler Thread>: User " + user.getName() + " logged off!");
          }
          else
          {

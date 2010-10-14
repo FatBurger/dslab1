@@ -114,10 +114,15 @@ public class UserData
     * Sets this user into logged in state and remembers
     * the used connection socket.
     */
-   public void Login(TcpConnection connection)
+   public boolean Login(TcpConnection connection, String password)
    {
-      this.connection = connection;
-      isLoggedIn = true;
+      if (this.password.equals(password))
+      {
+         this.connection = connection;
+         isLoggedIn = true;
+      }
+      
+      return isLoggedIn;
    }
    
    /**

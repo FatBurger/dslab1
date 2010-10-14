@@ -80,7 +80,7 @@ public class TcpConnectionListener implements Runnable
             lock.unlock();
             
             // handle connection communication in a separate thread
-            threadPool.execute(new TcpConnectionHandler(connection, userManager));
+            threadPool.execute(new TcpConnectionHandler(connection, userManager, this));
          }
          catch (IOException e)
          {
@@ -89,6 +89,21 @@ public class TcpConnectionListener implements Runnable
             System.out.println("<ClientConnectionListener Thread>: Server socket was closed, terminating!");
          }
       }    
+   }
+   
+   /**
+    * Removes a specific connection from the internal list.
+    * 
+    * @param connection The connection.
+    */
+   public void RemoveConnection(TcpConnection connection)
+   {
+      lock.lock();
+      if (activeConnections.contains(connection))
+      {
+         activeConnections.remove(connection);
+      }
+      lock.unlock();
    }
    
    /**

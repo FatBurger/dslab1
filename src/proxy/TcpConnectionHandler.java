@@ -9,6 +9,9 @@ import protocols.MessageFileProtocol;
 import protocols.misc.ProtocolMessage;
 import protocols.misc.MessageType;
 import proxy.commands.ClientExitCommand;
+import proxy.commands.ClientLoginCommand;
+import proxy.commands.ClientUnknownCommand;
+import proxy.userHandling.UserData;
 import proxy.userHandling.UserManager;
 
 /**
@@ -34,6 +37,11 @@ public class TcpConnectionHandler implements Runnable
    private final TcpConnection connection;
    
    /**
+    * The TCP connection listener.
+    */
+   private final TcpConnectionListener listener;
+   
+   /**
     * User manager reference.
     */
    private final UserManager userManager;
@@ -53,13 +61,15 @@ public class TcpConnectionHandler implements Runnable
     * 
     * @param connection The connection object.
     * @param userManager User manager reference.
+    * @param listener Connection listener reference.
     */
-   public TcpConnectionHandler(TcpConnection connection, UserManager userManager)
+   public TcpConnectionHandler(TcpConnection connection, UserManager userManager, TcpConnectionListener listener)
    {
       incomingProtocol = new MessageFileProtocol(connection.getInputStream());
       outgoingProtocol = new MessageFileProtocol(connection.getOutputStream());
       this.connection = connection;
       this.userManager = userManager;
+      this.listener = listener;
       
       RegisterCommands();
    }
@@ -69,6 +79,14 @@ public class TcpConnectionHandler implements Runnable
     */
    private void RegisterCommands()
    {
+      // register the unknown command as default
+      ClientUnknownCommand unknownCommand = new ClientUnknownCommand(outgoingProtocol);
+      messageCommandHandler.RegisterDefaultCommand(unknownCommand);
+      
+      // register the login command
+      ClientLoginCommand loginCommand = new ClientLoginCommand(userManager, outgoingProtocol, connection);
+      messageCommandHandler.RegisterCommand(loginCommand.getIdentifier(), loginCommand);
+      
       // register the exit command
       ClientExitCommand exitCommand = new ClientExitCommand(userManager, outgoingProtocol, connection);
       messageCommandHandler.RegisterCommand(exitCommand.getIdentifier(), exitCommand);
@@ -98,6 +116,15 @@ public class TcpConnectionHandler implements Runnable
          }
          catch (IOException e)
          {
+            // close the connection
+            connection.Disconnect();
+            
+            // try to log off the user (if authenticated over this connection)
+            LogoffUser();
+            
+            // remove from the listeners list
+            RemoveFromConnectionList();
+            
             // close resources and let the thread time out
             isRunning = false;
             System.out.println("<TcpConnectionHandler Thread>: Input stream was closed, terminating!");
@@ -105,4 +132,33 @@ public class TcpConnectionHandler implements Runnable
       }
    }
 
+   /**
+    * Tries to log off the user handled by this instance (if logged in)
+    */
+   private void LogoffUser()
+   {
+      // check if a user is logged on via this connection
+      UserData user = userManager.FindUserByConnection(connection);
+      
+      if (user != null)
+      {
+         // user was logged in - log off
+         user.Logout();
+         System.out.println("<TcpConnectionHandler Thread>: User " + user.getName() + " logged off!");
+      }
+      else
+      {
+         // user was not logged in, but close the connection anyway
+         System.out.println("<TcpConnectionHandler Thread>: Unknown user logged off!");
+      }
+   }
+   
+   /**
+    * Removes the connection from this instance from
+    * the listeners list of activeConnections.
+    */
+   private void RemoveFromConnectionList()
+   {
+      listener.RemoveConnection(connection);
+   }
 }

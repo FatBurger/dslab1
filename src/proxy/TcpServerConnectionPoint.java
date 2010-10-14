@@ -44,7 +44,7 @@ public class TcpServerConnectionPoint
    {
       try
       {
-         if (!serverSocket.isClosed())
+         if (serverSocket != null && !serverSocket.isClosed())
          {
             serverSocket.close();
 

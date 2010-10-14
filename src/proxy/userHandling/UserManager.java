@@ -39,6 +39,29 @@ public class UserManager
    }
 
    /**
+    * Tries to find a user that has a given name.
+    * 
+    * @param name The name to check.
+    * @return The user object if found, null otherwise.
+    */
+   public UserData FindUserByName(String name)
+   {
+      UserData user = null;
+
+      for (UserData curUser : userList.values())
+      {
+         if (curUser.getName().equals(name))
+         {
+            // user with that name found
+            user = curUser;
+            break;
+         }
+      }
+
+      return user;
+   }
+   
+   /**
     * Tries to find a user that uses the given connection.
     * 
     * @param connection
