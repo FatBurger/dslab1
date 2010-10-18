@@ -29,7 +29,7 @@ public class TcpServerConnectionPoint
       }
       catch (IOException e)
       {
-         System.out.println("Could not get I/O on port " + port + "!");
+         System.out.println("Could not get I/O on TCP port " + port + "!");
          StopListening();
          System.exit(1);
       }

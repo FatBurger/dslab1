@@ -25,7 +25,7 @@
 	<target name="run-proxy" depends="compile" description="Run proxy.">
 	    <java classname="proxy.FDS_Proxy" fork="true" classpathref="project.classpath">
 	        <arg value="10540"/><!-- tcpPort -->
-	        <arg value="10541" /><!-- udpPort -->
+	        <arg value="10540" /><!-- udpPort -->
 	        <arg value="3000"/><!-- fileserverTimeout -->
 	        <arg value="1000"/><!-- checkPeriod -->
 	    </java>

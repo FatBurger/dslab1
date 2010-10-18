@@ -60,20 +60,28 @@ public class ClientLoginCommand implements ICommand
          
          if (user != null)
          {
-            String password = parameters[1];
-            
-            // try to authenticate the user
-            boolean authenticated = user.Login(connection, password );
-            
-            if (authenticated)
+            if (user.isLoggedIn())
             {
-               responseProtocol.WriteText("Authentication succesful!");
-               System.out.println("<TcpConnectionHandler Thread>: User " + user.getName() + "succesfully authenticated!"); 
+               responseProtocol.WriteText("User already authenticated!");
+               System.out.println("<TcpConnectionHandler Thread>: Received login attempt for already authenticated user:  " + user.getName()); 
             }
             else
             {
+               String password = parameters[1];
+            
+               // try to authenticate the user
+               boolean authenticated = user.Login(connection, password );
+            
+               if (authenticated)
+               {
+                  responseProtocol.WriteText("Authentication succesful!");
+                  System.out.println("<TcpConnectionHandler Thread>: User " + user.getName() + " succesfully authenticated!"); 
+               }
+               else
+               {
                responseProtocol.WriteText("Wrong password!");
-               System.out.println("<TcpConnectionHandler Thread>: Received wrong authentication for user " + user.getName());
+                  System.out.println("<TcpConnectionHandler Thread>: Received wrong authentication for user " + user.getName());
+               }
             }
          }
          else

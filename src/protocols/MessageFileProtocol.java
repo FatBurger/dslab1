@@ -6,8 +6,8 @@ import protocols.misc.MessageType;
 import protocols.misc.ProtocolMessage;
 
 /**
- * Provides methods for convenient communication between
- * client and proxy.
+ * Provides methods for convenient TCP communication between
+ * clients, proxy and fileservers.
  * 
  * @author RaphM
  */

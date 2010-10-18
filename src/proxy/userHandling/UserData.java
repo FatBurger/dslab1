@@ -91,6 +91,17 @@ public class UserData
    }
    
    /**
+    * Indicates if this user is currently authenticated via a
+    * specific connection.
+    * 
+    * @param connection The TcpConnection to check.
+    */
+   public Boolean isAuthenticated(TcpConnection connection)
+   {
+      return isLoggedIn && this.connection == connection;
+   }
+   
+   /**
     * Adds a certain amount of credits.
     * 
     * @param credits Amount of credits to add.

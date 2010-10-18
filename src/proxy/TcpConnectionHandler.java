@@ -146,11 +146,6 @@ public class TcpConnectionHandler implements Runnable
          user.Logout();
          System.out.println("<TcpConnectionHandler Thread>: User " + user.getName() + " logged off!");
       }
-      else
-      {
-         // user was not logged in, but close the connection anyway
-         System.out.println("<TcpConnectionHandler Thread>: Unknown user logged off!");
-      }
    }
    
    /**
