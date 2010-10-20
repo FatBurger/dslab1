@@ -1,6 +1,7 @@
 package server.fileHandling;
 
 import java.io.File;
+import java.util.Vector;
 
 /**
  * Manages files.
@@ -33,5 +34,24 @@ public class FileManager
          System.out.println("Cannot find directory: " + fileLocation.getAbsolutePath());
          System.exit(1);
       }
+   }
+   
+   /**
+    * Returns a collection of all filenames in the current directory.
+    * 
+    * @return Collection of filenames
+    */
+   public Vector<String> listFiles()
+   {
+      Vector<String> fileNames = new Vector<String>();
+      
+      File[] files = fileLocation.listFiles();
+      
+      for (File file : files)
+      {
+         fileNames.add(file.getName());
+      }
+      
+      return fileNames;
    }
 }

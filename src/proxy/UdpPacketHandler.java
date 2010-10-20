@@ -64,7 +64,6 @@ public class UdpPacketHandler implements Runnable
          
          // add the new data object
          serverManager.addServer(serverData);
-         System.out.println("new server - initially online!");
       }
       else
       {

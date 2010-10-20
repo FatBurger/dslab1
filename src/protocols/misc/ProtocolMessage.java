@@ -1,5 +1,7 @@
 package protocols.misc;
 
+import java.util.Vector;
+
 /**
  * Contains possible read results the client may get.
  * 
@@ -21,6 +23,11 @@ public class ProtocolMessage
     * The result type.
     */
    private MessageType resultType;
+   
+   /**
+    * List of files.
+    */
+   private Vector<String> fileList;
    
    /**
     * Creates a ClientReadResult that represents a file.
@@ -52,6 +59,17 @@ public class ProtocolMessage
     * 
     * @param type The custom message tpy.e
     */
+   public ProtocolMessage(Vector<String> fileList)
+   {
+      this.resultType = MessageType.FileList;
+      this.fileList = fileList;
+   }
+   
+   /**
+    * Creates a ClientReadResult that represents another type.
+    * 
+    * @param type The custom message tpy.e
+    */
    public ProtocolMessage(MessageType type)
    {
       this.resultType = type;
@@ -63,6 +81,14 @@ public class ProtocolMessage
    public String getContent()
    {
       return content;
+   }
+   
+   /**
+    * @return The received filelist.
+    */
+   public Vector<String> getFileList()
+   {
+      return fileList;
    }
    
    /**

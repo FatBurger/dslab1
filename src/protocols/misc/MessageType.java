@@ -21,4 +21,9 @@ public enum MessageType
     * Read message is a force logoff message
     */
    ForceLogoff,
+   
+   /**
+    * Result of a list files operation
+    */
+   FileList,
 }

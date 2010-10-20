@@ -54,13 +54,11 @@ public class ServerOnlineTimerTask extends TimerTask
          {
             // set the server to offline
             server.SetOffline();
-            System.out.println("Server is offline!");
          }
          else
          {
             // set the server to online
             server.SetOnline();
-            System.out.println("Server is online!");
          }
       }
       

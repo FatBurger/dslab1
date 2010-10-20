@@ -1,6 +1,7 @@
 package protocols;
 
 import java.io.*;
+import java.util.Vector;
 
 import protocols.misc.MessageType;
 import protocols.misc.ProtocolMessage;
@@ -43,6 +44,16 @@ public class MessageFileProtocol
     * Force logoff protocol message.
     */
    private final String PROT_FORCE_LOGOFF = PROTOCOL_PLAIN_MARKER + "FORCE_LOGOFF";
+   
+   /**
+    * Indicates the start of a filenames list.
+    */
+   private final String PROT_FILENAMES_START = PROTOCOL_PLAIN_MARKER + "LISTRESULT";
+   
+   /**
+    * Indicates the end of a filenames list.
+    */
+   private final String PROT_FILENAMES_END = PROTOCOL_PLAIN_MARKER + "LISTRESULT_END";
    
    /**
     * Client endpoint of the communication socket.
@@ -93,6 +104,23 @@ public class MessageFileProtocol
    }
    
    /**
+    * Sends a filenames message.
+    * 
+    * @param fileNames The filenames.
+    */
+   public void SendFileNames(Vector<String> fileNames)
+   {
+      serverConnectionPoint.println(PROT_FILENAMES_START);
+      
+      for (String filename : fileNames)
+      {
+         serverConnectionPoint.println(Encode(filename));
+      }
+      
+      serverConnectionPoint.println(PROT_FILENAMES_END);
+   }
+   
+   /**
     * Reads messages from the proxy and "unpacks" them into text or file
     * according to the protocol header strings.
     * 
@@ -117,6 +145,13 @@ public class MessageFileProtocol
          
          // fill return value with file information
          result = new ProtocolMessage(fileName, fileContent);
+      }
+      else if (incomingLine.equals(PROT_FILENAMES_START))
+      {
+         Vector<String> fileList = ReadFileList();
+         
+         // return filelist message
+         result = new ProtocolMessage(fileList);
       }
       else if (incomingLine.equals(PROT_FORCE_LOGOFF))
       {
@@ -177,6 +212,20 @@ public class MessageFileProtocol
       fileContent.setLength(fileContent.length() - System.getProperty("line.separator").length());
       
       return Decode(fileContent.toString());
+   }
+   
+   private Vector<String> ReadFileList() throws IOException
+   {
+      Vector<String> fileList = new Vector<String>();
+      String currentLine;
+      
+      // read until PROT_FILENAMES_END is found
+      while(!(currentLine = clientConnectionPoint.readLine()).equals(PROT_FILENAMES_END))
+      {
+         fileList.add(currentLine);
+      }
+      
+      return fileList;
    }
    
    /**
