@@ -1,6 +1,7 @@
 package proxy.userHandling;
 
 import java.io.*;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -59,6 +60,16 @@ public class UserManager
       }
 
       return user;
+   }
+   
+   /**
+    * Returns all present users.
+    * 
+    * @return Vector of UserData objects.
+    */
+   public Collection<UserData> getAllUsers()
+   {
+      return userList.values();
    }
    
    /**

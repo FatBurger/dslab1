@@ -8,6 +8,8 @@ import commandHandling.ICommandHandler;
 import protocols.MessageFileProtocol;
 import protocols.misc.ProtocolMessage;
 import protocols.misc.MessageType;
+import proxy.commands.ClientBuyCommand;
+import proxy.commands.ClientCreditsCommand;
 import proxy.commands.ClientExitCommand;
 import proxy.commands.ClientLoginCommand;
 import proxy.commands.ClientUnknownCommand;
@@ -87,6 +89,14 @@ public class TcpConnectionHandler implements Runnable
       // register the login command
       ClientLoginCommand loginCommand = new ClientLoginCommand(userManager, outgoingProtocol, connection);
       messageCommandHandler.RegisterCommand(loginCommand.getIdentifier(), loginCommand);
+      
+      // register the credits command
+      ClientCreditsCommand creditsCommand = new ClientCreditsCommand(userManager, outgoingProtocol, connection);
+      messageCommandHandler.RegisterCommand(creditsCommand.getIdentifier(), creditsCommand);
+      
+      // register the buy command
+      ClientBuyCommand buyCommand = new ClientBuyCommand(userManager, outgoingProtocol, connection);
+      messageCommandHandler.RegisterCommand(buyCommand.getIdentifier(), buyCommand);
       
       // register the exit command
       ClientExitCommand exitCommand = new ClientExitCommand(userManager, outgoingProtocol, connection);

@@ -4,6 +4,8 @@ import commandHandling.*;
 
 import proxy.Arguments;
 import proxy.commands.ExitCommand;
+import proxy.commands.FileserversCommand;
+import proxy.commands.UserCommand;
 import proxy.serverHandling.ServerManager;
 import proxy.userHandling.UserManager;
 import tcpConnections.TcpServerConnectionPoint;
@@ -112,6 +114,14 @@ public class FDS_Proxy
     */
    private static void RegisterCommands()
    {
+      // register the fileservers command
+      FileserversCommand fileCommand = new FileserversCommand(serverManager);
+      consoleCommandHandler.RegisterCommand(fileCommand.getIdentifier(), fileCommand);
+      
+      // register the users command
+      UserCommand usersCommand = new UserCommand(userManager);
+      consoleCommandHandler.RegisterCommand(usersCommand.getIdentifier(), usersCommand);
+      
       // register the exit command
       ExitCommand exitCommand = new ExitCommand(consoleCommandHandler, tcpServer, tcpListener, udpServer, serverManager);
       consoleCommandHandler.RegisterCommand(exitCommand.getIdentifier(), exitCommand);

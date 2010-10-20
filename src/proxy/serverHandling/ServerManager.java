@@ -1,5 +1,6 @@
 package proxy.serverHandling;
 
+import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,6 +58,16 @@ public class ServerManager
    public ServerData getServerById(String id)
    {
       return serverList.get(id);
+   }
+   
+   /**
+    * Returns a collection of all present servers.
+    * 
+    * @return Collection of all present servers.
+    */
+   public Collection<ServerData> getAllServers()
+   {
+      return serverList.values();
    }
    
    /**

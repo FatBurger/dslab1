@@ -56,7 +56,8 @@ public class AliveProtocol
          try
          {
             InetAddress targetAddress = InetAddress.getByName(hostname);
-            DatagramPacket packet = new DatagramPacket(packetData, packetData.length, targetAddress, port);
+            DatagramPacket packet = new DatagramPacket(packetData,
+                     packetData.length, targetAddress, port);
 
             try
             {
@@ -115,10 +116,18 @@ public class AliveProtocol
       // extract the raw data as a string
       String incomingData = new String(incomingPacket.getData());
 
-      int remoteTcpPort = Integer.valueOf(Decode(incomingData).trim()).intValue();
+      try
+      {
+         int remoteTcpPort = Integer.valueOf(Decode(incomingData).trim())
+                  .intValue();
 
-      returnValue = new AlivePacket(incomingPacket.getAddress()
-               .getHostAddress(), remoteTcpPort);
+         returnValue = new AlivePacket(incomingPacket.getAddress()
+                  .getHostAddress(), remoteTcpPort);
+      }
+      catch (NumberFormatException e)
+      {
+         System.out.println("Received malformed UDP packet! (not an integer)");
+      }
 
       return returnValue;
    }
