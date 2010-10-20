@@ -53,7 +53,7 @@ public class ClientUnknownCommand implements ICommand
                   command.length() - 1);
 
          // responds to client
-         responseProtocol.WriteText("Unknown command: "
+         responseProtocol.writeText("Unknown command: "
                   + restoredCommand);
 
       }

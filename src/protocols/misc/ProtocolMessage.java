@@ -30,6 +30,11 @@ public class ProtocolMessage
    private Vector<String> fileList;
    
    /**
+    * The file size.
+    */
+   private long fileSize;
+   
+   /**
     * Creates a ClientReadResult that represents a file.
     * 
     * @param fileName The file name.
@@ -68,11 +73,35 @@ public class ProtocolMessage
    /**
     * Creates a ClientReadResult that represents another type.
     * 
-    * @param type The custom message tpy.e
+    * @param type The custom message tpye.
     */
    public ProtocolMessage(MessageType type)
    {
       this.resultType = type;
+   }
+   
+   /**
+    * Creates a ClientReadResult that represents another type.
+    * Also sets the filename
+    * 
+    * @param type The custom message type.
+    */
+   public ProtocolMessage(MessageType type, String filename)
+   {
+      this.resultType = type;
+      this.fileName = filename;
+   }
+   
+   /**
+    * Creates a ClientReadResult that represents another type.
+    * Also sets the file size
+    * 
+    * @param type The custom message type.
+    */
+   public ProtocolMessage(MessageType type, long size)
+   {
+      this.resultType = type;
+      this.fileSize = size;
    }
    
    /**
@@ -105,5 +134,15 @@ public class ProtocolMessage
    public MessageType getResultType()
    {
       return resultType;
+   }
+   
+   /**
+    * Gets the filesize.
+    * 
+    * @return The stored file size.
+    */
+   public long getFileSize()
+   {
+      return fileSize;
    }
 }

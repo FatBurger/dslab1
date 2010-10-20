@@ -26,4 +26,24 @@ public enum MessageType
     * Result of a list files operation
     */
    FileList,
+   
+   /**
+    * Request for a file names list.
+    */
+   FileNamesRequest,
+   
+   /**
+    * Request for download info.
+    */
+   DownloadInfoRequest,
+   
+   /**
+    * File size info message
+    */
+   FileSizeInfo,
+   
+   /**
+    * Download request message.
+    */
+   DownloadRequest,
 }

@@ -49,7 +49,7 @@ public class ListCommand implements ICommand
       Vector<String> fileNames = fileManager.listFiles();
       
       // respond them to the requesting proxy
-      protocol.SendFileNames(fileNames);  
+      protocol.sendFileNames(fileNames);  
    }
 
    /**

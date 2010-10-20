@@ -34,7 +34,7 @@ public class FDS_Client
       connection = new ProxyConnection(parsedArguments.getHostname(), parsedArguments.getPort());
       
       // start listening for messages from the proxy
-      StartProxyListener();
+      StartProxyListener(parsedArguments.getDownloadDir());
       
       // register known console commands and start command handling
       RegisterCommands();
@@ -44,10 +44,10 @@ public class FDS_Client
    /**
     * Listens for messages from the remote proxy.
     */
-   private static void StartProxyListener()
+   private static void StartProxyListener(String fileDirectory)
    {
       // create a new proxy listener
-      ProxyConnectionHandler listener = new ProxyConnectionHandler(commandHandler, connection);
+      ProxyConnectionHandler listener = new ProxyConnectionHandler(commandHandler, connection, fileDirectory);
       
       // run as a thread
       Thread listenerThread = new Thread(listener);

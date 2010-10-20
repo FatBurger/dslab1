@@ -33,6 +33,11 @@ public class ProxyConnectionHandler implements Runnable
    private final MessageFileProtocol protocol;
    
    /**
+    * The file directory for downloaded files.
+    */
+   private final String fileDirectory;
+   
+   /**
     * Indicates if this instance is being run currently.
     */
    private Boolean isRunning;
@@ -45,11 +50,13 @@ public class ProxyConnectionHandler implements Runnable
    /**
     * @param commandHandler The command handler.
     * @param connection The proxy connection.
+    * @param directory The directory for downloaded files.
     */
-   public ProxyConnectionHandler(ICommandHandler commandHandler, ProxyConnection connection)
+   public ProxyConnectionHandler(ICommandHandler commandHandler, ProxyConnection connection, String directory)
    {
       this.commandHandler = commandHandler;
       this.connection = connection;
+      this.fileDirectory = directory;
       protocol = new MessageFileProtocol(connection.GetInputStream());
    }
 
@@ -66,7 +73,7 @@ public class ProxyConnectionHandler implements Runnable
          try
          {
             // read next protocol element
-            ProtocolMessage readResult = protocol.ReadMessage();
+            ProtocolMessage readResult = protocol.readMessage();
             
             // perform action depending on result
             PerformAction(readResult);
@@ -117,6 +124,43 @@ public class ProxyConnectionHandler implements Runnable
     */
    private void WriteToFile(String fileName, String fileContent)
    {
-      System.out.println("write to file " + fileName + " content " + fileContent);
+      // check if the directory exists
+      File directory = new File(fileDirectory);
+      
+      if (!directory.exists())
+      {
+         System.out.println("<ProxyConnectionHandler Thread>: Directory does not exist, creating it: " + fileDirectory);
+         directory.mkdir();
+      }
+      
+      if (directory.isDirectory())
+      {
+         File fileToCreate = new File(fileDirectory + File.separator + fileName);
+         
+         if (fileToCreate.exists())
+         {
+            System.out.println("<ProxyConnectionHandler Thread>: File already exists, deleting the old one: " + fileToCreate);
+            fileToCreate.delete();
+         }
+         
+         try
+         {
+            fileToCreate.createNewFile();
+            
+            BufferedWriter out = new BufferedWriter(new FileWriter(fileToCreate));
+            out.write(fileContent);
+            out.close();
+            
+            System.out.println("<ProxyConnectionHandler Thread>: Succesfully downloaded file: " + fileToCreate);
+         }
+         catch (IOException e)
+         {
+            System.out.println("<ProxyConnectionHandler Thread>: Could not create file: " + fileToCreate);
+         }
+      }
+      else
+      {
+         System.out.println("<ProxyConnectionHandler Thread>: Specified name is no directory: " + fileDirectory);
+      }
    }
 }

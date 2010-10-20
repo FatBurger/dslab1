@@ -76,9 +76,7 @@ public class TcpConnectionListener implements Runnable
             lock.unlock();
             
             // handle connection communication in a separate thread
-            if (fileManager != null)
-            {
-            }
+            threadPool.execute(new TcpConnectionHandler(connection, fileManager, this));
          }
          catch (IOException e)
          {

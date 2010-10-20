@@ -89,6 +89,6 @@ public class ExitCommand implements ICommand
     */
    private void SendExitMessage()
    {
-      protocol.WriteText(COMMAND);
+      protocol.writeText(COMMAND);
    }
 }

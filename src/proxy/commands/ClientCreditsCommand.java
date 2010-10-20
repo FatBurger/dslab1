@@ -63,17 +63,17 @@ public class ClientCreditsCommand implements ICommand
          if (user != null && user.isLoggedIn())
          {
             // get the amount of credits
-            responseProtocol.WriteText("You have " + user.getCredits()
+            responseProtocol.writeText("You have " + user.getCredits()
                      + " credits left.");
          }
          else
          {
-            responseProtocol.WriteText("User not authenticated!");
+            responseProtocol.writeText("User not authenticated!");
          }
       }
       else
       {
-         responseProtocol.WriteText("Wrong parameters - Usage: !credits");
+         responseProtocol.writeText("Wrong parameters - Usage: !credits");
       }
 
    }

@@ -53,7 +53,7 @@
     
     <target name="run-client" depends="compile" description="Run client.">
         <java classname="client.FDS_Client" fork="true" classpathref="project.classpath">
-            <arg value="your/downloadDir" /><!-- downloadDir -->
+            <arg value="download" /><!-- downloadDir -->
             <arg value="localhost" /><!-- proxyHost -->
             <arg value="10540" /><!-- proxyTCPPort -->
         </java>

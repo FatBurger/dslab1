@@ -70,26 +70,26 @@ public class ClientBuyCommand implements ICommand
                {
                   // finally add the credits and respond to client
                   user.AddCredits(creditsToAdd);
-                  responseProtocol.WriteText("You now have " + user.getCredits() + " credits.");
+                  responseProtocol.writeText("You now have " + user.getCredits() + " credits.");
                }
                else
                {
-                  responseProtocol.WriteText("User not authenticated!");
+                  responseProtocol.writeText("User not authenticated!");
                }
             }
             else
             {
-               responseProtocol.WriteText("Supplied credit number is zero or less!");
+               responseProtocol.writeText("Supplied credit number is zero or less!");
             }
          }
          catch (NumberFormatException e)
          {
-            responseProtocol.WriteText("Supplied credit number has wrong format!");
+            responseProtocol.writeText("Supplied credit number has wrong format!");
          }
       }
       else
       {
-         responseProtocol.WriteText("Wrong parameters - Usage: !buy <credits>");
+         responseProtocol.writeText("Wrong parameters - Usage: !buy <credits>");
       }
    }
 

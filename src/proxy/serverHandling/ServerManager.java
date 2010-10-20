@@ -61,6 +61,27 @@ public class ServerManager
    }
    
    /**
+    * Gets the server with the lowest current load.
+    * 
+    * @return SeverData object if found, null otherwise.
+    */
+   public ServerData getLeastUsedServer()
+   {
+      ServerData leastUsedServer = null;
+      
+      // get the least used server
+      for (ServerData server : serverList.values())
+      {
+         if (server.isOnline() && (leastUsedServer == null || leastUsedServer.getLoad() > server.getLoad()))
+         {
+            leastUsedServer = server;
+         }
+      }
+      
+      return leastUsedServer;
+   }
+   
+   /**
     * Returns a collection of all present servers.
     * 
     * @return Collection of all present servers.

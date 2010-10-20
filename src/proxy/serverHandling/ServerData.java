@@ -22,7 +22,7 @@ public class ServerData
    /**
     * Current load of the server.
     */
-   private int load;
+   private long load;
    
    /**
     * Date when this instance was created.
@@ -65,9 +65,19 @@ public class ServerData
    }
    
    /**
+    * Adds a certain amount to load.
+    * 
+    * @param load the amount to add.
+    */
+   public void addLoad(long load)
+   {
+      this.load += load;
+   }
+   
+   /**
     * Current load of the server.
     */
-   public int getLoad()
+   public long getLoad()
    {
       return load;
    }

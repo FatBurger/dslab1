@@ -63,7 +63,7 @@ public class ClientExitCommand implements ICommand
          UserData user = userManager.FindUserByConnection(connection);
 
          // send a force logoff request
-         responseProtocol.SendForceLogoff();
+         responseProtocol.sendForceLogoff();
 
          if (user != null)
          {
@@ -82,7 +82,7 @@ public class ClientExitCommand implements ICommand
       }
       else
       {
-         responseProtocol.WriteText("Wrong parameters - Usage: !exit");
+         responseProtocol.writeText("Wrong parameters - Usage: !exit");
       }
    }
 

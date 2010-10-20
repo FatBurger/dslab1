@@ -88,11 +88,28 @@ public class TcpConnectionHandler implements Runnable
    {
       try
       {
-         ProtocolMessage result = incomingProtocol.ReadMessage();
+         ProtocolMessage result = incomingProtocol.readMessage();
 
          if (result.getResultType() == MessageType.Console)
          {
             messageCommandHandler.HandleCommand(result.getContent());
+         }
+         else if (result.getResultType() == MessageType.FileNamesRequest)
+         {
+            SendFileNames();
+         }
+         else if (result.getResultType() == MessageType.DownloadInfoRequest)
+         {
+            SendDownloadInfo(result.getFileName());
+            
+            // wait for an eventual download request, otherwise the client closes the connection
+            // and we get an IOException
+            ProtocolMessage downloadRequest = incomingProtocol.readMessage();
+            if (downloadRequest.getResultType() == MessageType.DownloadRequest)
+            {
+               SendFile(result.getFileName(), fileManager.getFileContent(result.getFileName()));
+            }
+            
          }
          else
          {
@@ -115,6 +132,34 @@ public class TcpConnectionHandler implements Runnable
          // remove from the listeners list
          RemoveFromConnectionList();
       }
+   }
+   
+   /**
+    * Sends file names to the connection initiator
+    */
+   private void SendFileNames()
+   {
+      outgoingProtocol.sendFileNames(fileManager.listFiles());
+   }
+   
+   /**
+    * Sends download info data to the connection initiator
+    */
+   private void SendDownloadInfo(String fileName)
+   {
+      long fileSize = fileManager.getFileSize(fileName);
+      outgoingProtocol.sendFileSizeInfo(fileSize);
+   }
+   
+   /**
+    * Sends a file to the proxy.
+    * 
+    * @param fileName The file name.
+    * @param fileContent The file content.
+    */
+   private void SendFile(String fileName, String fileContent)
+   {
+      outgoingProtocol.sendFile(fileName, fileContent);
    }
 
    /**

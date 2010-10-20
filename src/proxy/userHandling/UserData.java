@@ -22,7 +22,7 @@ public class UserData
    /**
     * Credits of the user.
     */
-   private int credits;
+   private long credits;
    
    /**
     * Indicates if this user is currently logged in.
@@ -67,7 +67,7 @@ public class UserData
    /**
     * Credits of the user.
     */
-   public int getCredits()
+   public long getCredits()
    {
       return credits;
    }
@@ -116,7 +116,7 @@ public class UserData
     * 
     * @param credits Amount of credits to remove.
     */
-   public void RemoveCredits(int credits)
+   public void RemoveCredits(long credits)
    {
       this.credits -= credits;
    }

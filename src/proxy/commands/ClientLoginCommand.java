@@ -62,7 +62,7 @@ public class ClientLoginCommand implements ICommand
          {
             if (user.isLoggedIn())
             {
-               responseProtocol.WriteText("User already authenticated!");
+               responseProtocol.writeText("User already authenticated!");
                System.out.println("<TcpConnectionHandler Thread>: Received login attempt for already authenticated user:  " + user.getName()); 
             }
             else
@@ -74,25 +74,25 @@ public class ClientLoginCommand implements ICommand
             
                if (authenticated)
                {
-                  responseProtocol.WriteText("Authentication succesful!");
+                  responseProtocol.writeText("Authentication succesful!");
                   System.out.println("<TcpConnectionHandler Thread>: User " + user.getName() + " succesfully authenticated!"); 
                }
                else
                {
-               responseProtocol.WriteText("Wrong password!");
+               responseProtocol.writeText("Wrong password!");
                   System.out.println("<TcpConnectionHandler Thread>: Received wrong authentication for user " + user.getName());
                }
             }
          }
          else
          {
-            responseProtocol.WriteText("Could not find user!");
+            responseProtocol.writeText("Could not find user!");
             System.out.println("<TcpConnectionHandler Thread>: Received login command for unknown user: " + userName);
          }
       }
       else
       {
-         responseProtocol.WriteText("Wrong parameters - Usage: !login <username> <password>");
+         responseProtocol.writeText("Wrong parameters - Usage: !login <username> <password>");
       }
    }
    

@@ -57,7 +57,7 @@ public class ProxyCommand implements ICommand
          // COMMAND_DELIMITER
          String restoredCommand = command.toString().substring(0,
                   command.length() - 1);
-         protocol.WriteText(restoredCommand);
+         protocol.writeText(restoredCommand);
       }
    }
 
