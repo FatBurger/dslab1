@@ -27,7 +27,7 @@ public class ServerData
    /**
     * Date when this instance was created.
     */
-   private Date timestamp;
+   private Date lastActivityTimestamp;
    
    /**
     * Online status of the server.
@@ -41,12 +41,11 @@ public class ServerData
     * @param tcpPort TCP port of the server.
     * @param load Current load of the server.
     */
-   public ServerData(String address, int tcpPort, int load)
+   public ServerData(String address, int tcpPort)
    {
       this.address = address;
       this.tcpPort = tcpPort;
-      this.load = load;
-      this.timestamp = new Date();
+      this.lastActivityTimestamp = new Date();
    }
    
    /**
@@ -86,9 +85,9 @@ public class ServerData
     * 
     * @return Timestamp.
     */
-   public Date getTimestamp()
+   public Date getLastActivityTimestamp()
    {
-      return timestamp;
+      return lastActivityTimestamp;
    }
    
    /**
@@ -115,6 +114,14 @@ public class ServerData
    public void updateLoad(int newLoad)
    {
       load = newLoad;
+   }
+   
+   /**
+    * Updates the activity timestamp to the current date.
+    */
+   public void renewActivityTimestamp()
+   {
+      lastActivityTimestamp = new Date();
    }
    
    /**

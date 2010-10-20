@@ -1,6 +1,6 @@
 package proxy.userHandling;
 
-import proxy.TcpConnection;
+import tcpConnections.TcpConnection;
 
 /**
  * Holds data for users.

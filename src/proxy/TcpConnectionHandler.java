@@ -13,6 +13,7 @@ import proxy.commands.ClientLoginCommand;
 import proxy.commands.ClientUnknownCommand;
 import proxy.userHandling.UserData;
 import proxy.userHandling.UserManager;
+import tcpConnections.TcpConnection;
 
 /**
  * Handles client connections.

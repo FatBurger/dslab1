@@ -32,21 +32,21 @@
 	</target>
     
     <target name="run-fileserver1" depends="compile" description="Run 1st fileserver.">
-        <java classname="your.Fileserver" fork="true" classpathref="project.classpath">
-        	<arg value="your/sharedFilesDir"/><!-- sharedFilesDir -->
-        	<arg value="10000 + dslabXXX * 10 + 2"/><!-- tcpPort -->
+        <java classname="server.FDS_Server" fork="true" classpathref="project.classpath">
+        	<arg value="myFiles"/><!-- sharedFilesDir -->
+        	<arg value="10541"/><!-- tcpPort -->
         	<arg value="localhost"/><!-- proxyHost -->
-            <arg value="10000 + dslabXXX * 10 + 1"/><!-- proxyUDPPort -->
+            <arg value="10540"/><!-- proxyUDPPort -->
             <arg value="1000"/><!-- alivePeriod -->
         </java>
     </target>
 	
     <target name="run-fileserver2" depends="compile" description="Run 2nd fileserver.">
-        <java classname="your.Fileserver" fork="true" classpathref="project.classpath">
-        	<arg value="your/sharedFilesDir2"/><!-- sharedFilesDir -->
-        	<arg value="10000 + dslabXXX * 10 + 3"/><!-- tcpPort -->
+        <java classname="server.FDS_Server" fork="true" classpathref="project.classpath">
+        	<arg value="myFiles"/><!-- sharedFilesDir -->
+        	<arg value="10542"/><!-- tcpPort -->
         	<arg value="localhost"/><!-- proxyHost -->
-            <arg value="10000 + dslabXXX * 10 + 1"/><!-- proxyUDPPort -->
+            <arg value="10540"/><!-- proxyUDPPort -->
             <arg value="1000"/><!-- alivePeriod -->
         </java>
     </target>

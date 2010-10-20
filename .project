@@ -16,9 +16,34 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>src/server</name>
+			<type>2</type>
+			<location>D:/Programming/Java/dslab1/src/server</location>
+		</link>
+		<link>
+			<name>src/tcpConnections</name>
+			<type>2</type>
+			<location>D:/Programming/Java/dslab1/src/tcpConnections</location>
+		</link>
+		<link>
 			<name>src/proxy/serverHandling</name>
 			<type>2</type>
 			<location>D:/Programming/Java/dslab1/src/proxy/serverHandling</location>
+		</link>
+		<link>
+			<name>src/server/commands</name>
+			<type>2</type>
+			<location>D:/Programming/Java/dslab1/src/server/commands</location>
+		</link>
+		<link>
+			<name>src/server/fileHandling</name>
+			<type>2</type>
+			<location>D:/Programming/Java/dslab1/src/server/fileHandling</location>
+		</link>
+		<link>
+			<name>src/server/heartbeatHandling</name>
+			<type>2</type>
+			<location>D:/Programming/Java/dslab1/src/server/heartbeatHandling</location>
 		</link>
 	</linkedResources>
 </projectDescription>

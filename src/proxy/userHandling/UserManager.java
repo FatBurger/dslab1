@@ -5,7 +5,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import proxy.TcpConnection;
+import tcpConnections.TcpConnection;
 
 /**
  * Manages users and their status.

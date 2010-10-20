@@ -6,6 +6,7 @@ import proxy.Arguments;
 import proxy.commands.ExitCommand;
 import proxy.serverHandling.ServerManager;
 import proxy.userHandling.UserManager;
+import tcpConnections.TcpServerConnectionPoint;
 
 /**
  * The main class for the File Distribution System (FDS) Proxy.
@@ -47,7 +48,7 @@ public class FDS_Proxy
    /**
     * The server manager.
     */
-   private static final ServerManager serverManager = new ServerManager();
+   private static ServerManager serverManager;
 
    /**
     * Main entry point
@@ -58,6 +59,10 @@ public class FDS_Proxy
    {
       // parse command line arguments
       Arguments parsedArguments = new Arguments(args);
+      
+      // start the serverManager with command line parameters
+      serverManager = new ServerManager(parsedArguments.getFileserverTimeout(), 
+                                        parsedArguments.getCheckPeriod());
       
       // initialize the TCP server port
       tcpServer = new TcpServerConnectionPoint(parsedArguments.getTcpPort());
@@ -108,7 +113,7 @@ public class FDS_Proxy
    private static void RegisterCommands()
    {
       // register the exit command
-      ExitCommand exitCommand = new ExitCommand(consoleCommandHandler, tcpServer, tcpListener, udpServer);
+      ExitCommand exitCommand = new ExitCommand(consoleCommandHandler, tcpServer, tcpListener, udpServer, serverManager);
       consoleCommandHandler.RegisterCommand(exitCommand.getIdentifier(), exitCommand);
    }
 }

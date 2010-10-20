@@ -1,9 +1,9 @@
 package proxy.commands;
 
 import protocols.MessageFileProtocol;
-import proxy.TcpConnection;
 import proxy.userHandling.UserData;
 import proxy.userHandling.UserManager;
+import tcpConnections.TcpConnection;
 import commandHandling.ICommand;
 
 /**

@@ -1,4 +1,4 @@
-package proxy;
+package server;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -8,16 +8,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import protocols.MessageFileProtocol;
-import proxy.userHandling.UserManager;
+import server.fileHandling.FileManager;
 import tcpConnections.TcpConnection;
 import tcpConnections.TcpServerConnectionPoint;
 
-/**
- * Listens for client connections.
- * 
- * @author RaphM
- */
 public class TcpConnectionListener implements Runnable
 {
    /**
@@ -37,9 +31,9 @@ public class TcpConnectionListener implements Runnable
    private final ExecutorService threadPool = Executors.newCachedThreadPool();
    
    /**
-    * User manager reference.
+    * File manager reference.
     */
-   private final UserManager userManager;
+   private final FileManager fileManager;
    
    /**
     * Stores all active connections.
@@ -55,12 +49,12 @@ public class TcpConnectionListener implements Runnable
     * Initializes this instance.
     * 
     * @param connection The client connection object.
-    * @param userManager User manager reference.
+    * @param fileManager File manager reference.
     */
-   public TcpConnectionListener(TcpServerConnectionPoint connection, UserManager userManager)
+   public TcpConnectionListener(TcpServerConnectionPoint connection, FileManager fileManager)
    {
       this.tcpServer = connection;
-      this.userManager = userManager;
+      this.fileManager = fileManager;
    }
    
    /**
@@ -82,7 +76,9 @@ public class TcpConnectionListener implements Runnable
             lock.unlock();
             
             // handle connection communication in a separate thread
-            threadPool.execute(new TcpConnectionHandler(connection, userManager, this));
+            if (fileManager != null)
+            {
+            }
          }
          catch (IOException e)
          {
@@ -117,12 +113,8 @@ public class TcpConnectionListener implements Runnable
       isRunning = false;
       lock.lock();
       for (TcpConnection connection : activeConnections)
-      {
-         // force the clients to perform a logoff
-         MessageFileProtocol protocol = new MessageFileProtocol(connection.getOutputStream());
-         protocol.SendForceLogoff();
-         
-         // also close the local connection sockets
+      {       
+         // close the local connection sockets
          connection.Disconnect();
       }
       

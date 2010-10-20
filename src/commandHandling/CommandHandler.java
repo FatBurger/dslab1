@@ -165,6 +165,12 @@ public class CommandHandler implements ICommandHandler
             // execute default command otherwise if present
             defaultCommand.Execute(tokens);       
          }
+         else
+         {
+            // execute the generic unknown command
+            UnknownCommand unknownCommand = new UnknownCommand();
+            unknownCommand.Execute(tokens);
+         }
       }
    }
    

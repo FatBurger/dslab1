@@ -1,4 +1,4 @@
-package proxy;
+package tcpConnections;
 
 import java.io.*;
 import java.net.Socket;

@@ -18,30 +18,32 @@ public class UdpPacketHandler implements Runnable
     * Reference to the received datagram packet.
     */
    private final DatagramPacket packet;
-   
+
    /**
     * Protocol used to process the incoming packet.
     */
    private final AliveProtocol protocol = new AliveProtocol();
-   
+
    /**
     * Server manager reference.
     */
    private final ServerManager serverManager;
-   
 
    /**
     * Initializes a new UdpPacketHandler.
     * 
-    * @param incomingPacket The incoming datagram packet to handle.
-    * @param serverManager Server manager reference.
+    * @param incomingPacket
+    *           The incoming datagram packet to handle.
+    * @param serverManager
+    *           Server manager reference.
     */
-   public UdpPacketHandler(DatagramPacket incomingPacket, ServerManager serverManager)
+   public UdpPacketHandler(DatagramPacket incomingPacket,
+            ServerManager serverManager)
    {
       this.packet = incomingPacket;
       this.serverManager = serverManager;
    }
-   
+
    /**
     * Executed as a thread.
     */
@@ -49,13 +51,26 @@ public class UdpPacketHandler implements Runnable
    {
       // use protocol to extract packet data
       AlivePacket convertedPacket = protocol.ExtractPacketData(packet);
-      
-      // create server data object with the received data
-      ServerData serverData = new ServerData(convertedPacket.getAddress(), convertedPacket.getTcpPort(), convertedPacket.getLoad());
-      
-      // update info in server manager
-      serverManager.updateServerStatus(serverData);
-      
+
+      // get the unique identifier of the packets originator
+      String serverIdentifier = convertedPacket.getServerIdentifier();
+
+      ServerData serverData = serverManager.getServerById(serverIdentifier);
+
+      if (serverData == null)
+      {
+         // create server data object with the received data
+         serverData = new ServerData(convertedPacket.getAddress(), convertedPacket.getTcpPort());
+         
+         // add the new data object
+         serverManager.addServer(serverData);
+         System.out.println("new server - initially online!");
+      }
+      else
+      {
+         // update the existing object with the new load and update the timestamp
+         serverData.renewActivityTimestamp();
+      }
    }
 
 }

@@ -18,22 +18,15 @@ public class AlivePacket
    private final int tcpPort;
    
    /**
-    * Current load of the originator.
-    */
-   private final int load;
-   
-   /**
     * Creates a new alive packet instance.
     * 
     * @param address Textual IP representation of the messages originator.
     * @param tcpPort TCP port on which the originator is listening.
-    * @param load Current load of the originator.
     */
-   public AlivePacket(String address, int tcpPort, int load)
+   public AlivePacket(String address, int tcpPort)
    {
       this.address = address;
       this.tcpPort = tcpPort;
-      this.load = load;
    }
    
    /**
@@ -53,10 +46,12 @@ public class AlivePacket
    }
    
    /**
-    * Current load of the originator.
+    * Gets a unique server id (address + port)
+    * 
+    * @return Unique server id.
     */
-   public int getLoad()
+   public String getServerIdentifier()
    {
-      return load;
+      return address + ":" + tcpPort;
    }
 }

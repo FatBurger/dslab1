@@ -1,17 +1,12 @@
-package proxy.commands;
+package server.commands;
 
-import proxy.TcpConnectionListener;
-import proxy.UdpServerConnectionPoint;
-import proxy.serverHandling.ServerManager;
+import server.TcpConnectionListener;
+import server.heartbeatHandling.HeartbeatManager;
 import tcpConnections.TcpServerConnectionPoint;
+
 import commandHandling.ICommand;
 import commandHandling.ICommandHandler;
 
-/**
- * Implementation for the proxy's exit command
- * 
- * @author RaphM
- */
 public class ExitCommand implements ICommand
 {
    /**
@@ -28,21 +23,16 @@ public class ExitCommand implements ICommand
     * Server connection reference.
     */
    private final TcpServerConnectionPoint connection;
-
-   /**
-    * TCP connection listener reference.
-    */
-   private final TcpConnectionListener tcpListener;
-
-   /**
-    * The UDP connection point
-    */
-   private final UdpServerConnectionPoint udpConnectionPoint;
    
    /**
-    * The server manager reference.
+    * The Tcp connection listener object.
     */
-   private final ServerManager serverManager;
+   private final TcpConnectionListener listener;
+   
+   /**
+    * The heartbeat manager reference.
+    */
+   private final HeartbeatManager heartbeatManager;
 
    /**
     * Creates a new exit command.
@@ -53,22 +43,18 @@ public class ExitCommand implements ICommand
     * @param connection
     *           ServerConnection that should be closed when this command is
     *           executed.
-    * @param listener
-    *           TCP connection listeners, provides a method to close all active
-    *           client connections.
-    * @param serverManager Server manager reference, used to stop the recurring timertask.
+    * @param listener The tcp connection listener object
+    * @param heartbeatManager Heartbeat manager reference, used to stop the recurring timertask.
     */
    public ExitCommand(ICommandHandler commandHandler,
             TcpServerConnectionPoint connection,
             TcpConnectionListener listener,
-            UdpServerConnectionPoint udpConnectionPoint,
-            ServerManager serverManager)
+            HeartbeatManager heartbeatManager)
    {
       this.commandHandler = commandHandler;
       this.connection = connection;
-      this.tcpListener = listener;
-      this.udpConnectionPoint = udpConnectionPoint;
-      this.serverManager = serverManager;
+      this.listener = listener;
+      this.heartbeatManager = heartbeatManager;
    }
 
    /**
@@ -80,11 +66,10 @@ public class ExitCommand implements ICommand
       {
          // stop command handling and close the server port as well
          // as all open client connections
-         tcpListener.CloseAllConnections();
-         commandHandler.StopListening();
+         listener.CloseAllConnections();
          connection.StopListening();
-         udpConnectionPoint.StopListening();
-         serverManager.StopOnlineCheck();
+         heartbeatManager.StopAliveMessages();
+         commandHandler.StopListening();
          System.out.println("Exit success!");
       }
       else
