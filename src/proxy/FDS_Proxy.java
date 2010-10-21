@@ -1,6 +1,7 @@
 package proxy;
 
 import commandHandling.*;
+import common.InitFailedException;
 
 import proxy.Arguments;
 import proxy.commands.ExitCommand;
@@ -46,7 +47,7 @@ public class FDS_Proxy
    /**
     * The user manager.
     */
-   private static final UserManager userManager = new UserManager();
+   private static UserManager userManager;
 
    /**
     * The server manager.
@@ -61,28 +62,38 @@ public class FDS_Proxy
     */
    public static void main(String[] args)
    {
-      // parse command line arguments
-      Arguments parsedArguments = new Arguments(args);
+      try
+      {
+         // parse command line arguments
+         Arguments parsedArguments = new Arguments(args);
 
-      // start the serverManager with command line parameters
-      serverManager = new ServerManager(parsedArguments.getFileserverTimeout(),
-               parsedArguments.getCheckPeriod());
+         // start the serverManager with command line parameters
+         serverManager = new ServerManager(parsedArguments
+                  .getFileserverTimeout(), parsedArguments.getCheckPeriod());
 
-      // initialize the TCP server port
-      tcpServer = new TcpServerConnectionPoint(parsedArguments.getTcpPort());
+         // init the userManager
+         userManager = new UserManager();
 
-      // start listening for messages from TCP clients
-      StartTcpListener();
+         // initialize the TCP server port
+         tcpServer = new TcpServerConnectionPoint(parsedArguments.getTcpPort());
 
-      // initialize the UDP server port
-      udpServer = new UdpServerConnectionPoint(parsedArguments.getUdpPort());
+         // start listening for messages from TCP clients
+         StartTcpListener();
 
-      // start listening for UDP packets
-      StartUdpListener();
+         // initialize the UDP server port
+         udpServer = new UdpServerConnectionPoint(parsedArguments.getUdpPort());
 
-      // register known console commands and start listening for them
-      RegisterCommands();
-      consoleCommandHandler.StartListening();
+         // start listening for UDP packets
+         StartUdpListener();
+
+         // register known console commands and start listening for them
+         RegisterCommands();
+         consoleCommandHandler.StartListening();
+      }
+      catch (InitFailedException e)
+      {
+         System.out.println("Proxy initialization failed - terminating!");
+      }
    }
 
    /**
@@ -91,7 +102,8 @@ public class FDS_Proxy
    private static void StartTcpListener()
    {
       // create a new client connection listener
-      tcpListener = new TcpConnectionListener(tcpServer, userManager, serverManager);
+      tcpListener = new TcpConnectionListener(tcpServer, userManager,
+               serverManager);
 
       // run as a thread
       Thread listenerThread = new Thread(tcpListener);

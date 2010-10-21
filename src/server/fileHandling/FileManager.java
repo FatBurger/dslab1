@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Vector;
 
+import common.InitFailedException;
+
 /**
  * Manages files.
  * 
@@ -23,8 +25,10 @@ public class FileManager
     * 
     * @param directory
     *           The directory where files are located.
+    *           
+    * @throws InitFailedException Gets thrown when the directory cannot be found.
     */
-   public FileManager(String directory)
+   public FileManager(String directory) throws InitFailedException
    {
       fileLocation = new File(directory);
 
@@ -38,7 +42,7 @@ public class FileManager
       {
          System.out.println("Cannot find directory: "
                   + fileLocation.getAbsolutePath());
-         System.exit(1);
+         throw new InitFailedException();
       }
    }
 

@@ -3,6 +3,8 @@ package client;
 import java.io.*;
 import java.net.*;
 
+import common.InitFailedException;
+
 /**
  * Encapsulates a TCP connection via a Socket.
  * 
@@ -32,8 +34,11 @@ public class ProxyConnection
     *           The target hostname.
     * @param port
     *           The target port.
+    *           
+    * @throws InitFailedException Exception that gets thrown when the connection cannot be
+    *                             initialized.
     */
-   public ProxyConnection(String hostname, int port)
+   public ProxyConnection(String hostname, int port) throws InitFailedException
    {
       // try to create the socket
       try
@@ -45,14 +50,14 @@ public class ProxyConnection
          System.out.println("Could not create socket for host " + hostname
                   + " on port " + port + "!");
          Disconnect();
-         System.exit(1);
+         throw new InitFailedException();
       }
       catch (IOException e)
       {
          System.out.println("Could not get I/O for host " + hostname
                   + " on port " + port + "!");
          Disconnect();
-         System.exit(1);
+         throw new InitFailedException();
       }
 
       // try to get input and output streams
@@ -65,7 +70,7 @@ public class ProxyConnection
          System.out.println("Could not get input stream for host " + hostname
                   + " on port " + port + "!");
          Disconnect();
-         System.exit(1);
+         throw new InitFailedException();
       }
 
       try
@@ -77,7 +82,7 @@ public class ProxyConnection
          System.out.println("Could not get output stream for host " + hostname
                   + " on port " + port + "!");
          Disconnect();
-         System.exit(1);
+         throw new InitFailedException();
       }
 
       System.out.println("Connected to " + hostname + ":" + port

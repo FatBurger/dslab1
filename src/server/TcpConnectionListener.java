@@ -8,6 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import common.InitFailedException;
+
 import server.fileHandling.FileManager;
 import tcpConnections.TcpConnection;
 import tcpConnections.TcpServerConnectionPoint;
@@ -77,6 +79,11 @@ public class TcpConnectionListener implements Runnable
             
             // handle connection communication in a separate thread
             threadPool.execute(new TcpConnectionHandler(connection, fileManager, this));
+         }
+         catch (InitFailedException e)
+         {
+            System.out
+            .println("<TcpConnectionListener Thread>: Failed to get inbound TCP connection socket!");
          }
          catch (IOException e)
          {

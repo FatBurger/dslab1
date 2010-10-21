@@ -1,5 +1,7 @@
 package server;
 
+import common.InitFailedException;
+
 /**
  * Parses command line arguments for the server.
  * 
@@ -37,8 +39,11 @@ public class Arguments
     * Parses the given arguments.
     * 
     * @param arguments The argument array.
+    * 
+    * @throws InitFailedException Gets thrown when the arguments are
+    *                             missing or in wrong format.
     */
-   public Arguments(String[] arguments)
+   public Arguments(String[] arguments) throws InitFailedException
    {
       // validate command line arguments
       if (arguments == null || arguments.length != 5)
@@ -68,11 +73,14 @@ public class Arguments
    
    /**
     * Prints out a usage message and terminates the program.
+    * 
+    * @throws InitFailedException Gets thrown when the arguments are
+    *                             missing or in wrong format.
     */
-   private void Usage()
+   private void Usage() throws InitFailedException
    {
       System.out.println("Usage: FDS_Server <sharedFilesDir> <tcpPort> <proxyHost> <proxyUdpPort> <alivePeriod>");
-      System.exit(1);
+      throw new InitFailedException();
    }
    
    /**

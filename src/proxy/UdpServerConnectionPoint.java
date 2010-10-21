@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
+import common.InitFailedException;
+
 import protocols.AliveProtocol;
 
 /**
@@ -28,8 +30,11 @@ public class UdpServerConnectionPoint
     * 
     * @param port
     *           UDP port to listen on.
+    *           
+    * @throws InitFailedException Exception that gets thrown when the
+    *                             UDP connection point cannot be established.
     */
-   public UdpServerConnectionPoint(int port)
+   public UdpServerConnectionPoint(int port) throws InitFailedException
    {
       try
       {
@@ -39,7 +44,7 @@ public class UdpServerConnectionPoint
       {
          System.out.println("Could not get I/O on UDP port " + port + "!");
          StopListening();
-         System.exit(1);
+         throw new InitFailedException();
       }
 
       System.out.println("Listening on UDP port " + port + "!");

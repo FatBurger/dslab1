@@ -3,6 +3,8 @@ package tcpConnections;
 import java.io.*;
 import java.net.Socket;
 
+import common.InitFailedException;
+
 /**
  * Encapsulates a TCP connection via a Socket.
  * 
@@ -30,8 +32,10 @@ public class TcpConnection
     * and output stream.
     * 
     * @param socket The socket.
+    * 
+    * @throws InitFailedException Gets thrown when a stream fails to open.
     */
-   public TcpConnection(Socket socket)
+   public TcpConnection(Socket socket) throws InitFailedException
    {
       // try to create the socket
       connection = socket;
@@ -47,7 +51,7 @@ public class TcpConnection
                   + socket.getInetAddress().getCanonicalHostName()
                   + " on port " + socket.getPort() + "!");
          Disconnect();
-         System.exit(1);
+         throw new InitFailedException();
       }
 
       try
@@ -60,7 +64,7 @@ public class TcpConnection
                   + socket.getInetAddress().getCanonicalHostName()
                   + " on port " + socket.getPort() + "!");
          Disconnect();
-         System.exit(1);
+         throw new InitFailedException();
       }
 
       System.out.println("<TcpConnectionListener Thread>: Incoming connection from "

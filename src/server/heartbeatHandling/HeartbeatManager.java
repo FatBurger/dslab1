@@ -5,6 +5,8 @@ import java.net.DatagramSocket;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import common.InitFailedException;
+
 public class HeartbeatManager
 {
    /**
@@ -23,8 +25,11 @@ public class HeartbeatManager
     * @param proxyhostName Target hostname.
     * @param proxyUdpPort Target UDP port of the proxy.
     * @param alivePeriod Period for sending alive packets
+    * 
+    * @throws InitFailedException Gets thrown when no UDP port for sending heartbeats
+    *                             is available.
     */
-   public HeartbeatManager(String proxyhostName, int proxyUdpPort, int alivePeriod, int localTcpPort)
+   public HeartbeatManager(String proxyhostName, int proxyUdpPort, int alivePeriod, int localTcpPort) throws InitFailedException
    {
       try
       {
@@ -35,7 +40,7 @@ public class HeartbeatManager
       {
          System.out.println("Could not get UDP port for sending alive Messages!");
          StopAliveMessages();
-         System.exit(1);
+         throw new InitFailedException();
       }
       
       // start sending alive packets check timer for fileServers

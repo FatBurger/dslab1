@@ -2,6 +2,7 @@ package server;
 
 import commandHandling.CommandHandler;
 import commandHandling.ICommandHandler;
+import common.InitFailedException;
 
 import server.Arguments;
 import server.TcpConnectionListener;
@@ -31,11 +32,12 @@ public class FDS_Server
     * The file manager.
     */
    private static FileManager fileManager;
-   
+
    /**
     * Command handler that will read from System.in
     */
-   private static ICommandHandler consoleCommandHandler = new CommandHandler(System.in);
+   private static ICommandHandler consoleCommandHandler = new CommandHandler(
+            System.in);
 
    /**
     * The heartbeat manager.
@@ -50,27 +52,35 @@ public class FDS_Server
     */
    public static void main(String[] args)
    {
-      // parse command line arguments
-      Arguments parsedArguments = new Arguments(args);
+      try
+      {
+         // parse command line arguments
+         Arguments parsedArguments = new Arguments(args);
 
-      // initializes the file manager
-      fileManager = new FileManager(parsedArguments.getDirectory());
+         // initializes the file manager
+         fileManager = new FileManager(parsedArguments.getDirectory());
 
-      // initialize the TCP server port
-      tcpServer = new TcpServerConnectionPoint(parsedArguments.getTcpPort());
+         // initialize the TCP server port
+         tcpServer = new TcpServerConnectionPoint(parsedArguments.getTcpPort());
 
-      // start listening for messages from TCP clients
-      StartTcpListener();
+         // start listening for messages from TCP clients
+         StartTcpListener();
 
-      // initialize and start the heartbeat manager
-      heartbeatManager = new HeartbeatManager(parsedArguments.getProxyHost(),
-                                              parsedArguments.getProxyUdpPort(), 
-                                              parsedArguments.getalivePeriod(), 
-                                              parsedArguments.getTcpPort());
-      
-      // register known console commands and start listening for them
-      RegisterCommands();
-      consoleCommandHandler.StartListening();
+         // initialize and start the heartbeat manager
+         heartbeatManager = new HeartbeatManager(
+                  parsedArguments.getProxyHost(), parsedArguments
+                           .getProxyUdpPort(),
+                  parsedArguments.getalivePeriod(), parsedArguments
+                           .getTcpPort());
+
+         // register known console commands and start listening for them
+         RegisterCommands();
+         consoleCommandHandler.StartListening();
+      }
+      catch (InitFailedException e)
+      {
+         System.out.println("Fileserver initialization failed - terminating!");
+      }
    }
 
    /**
@@ -85,14 +95,16 @@ public class FDS_Server
       Thread listenerThread = new Thread(tcpListener);
       listenerThread.start();
    }
-   
+
    /**
     * Registers known console commands.
     */
    private static void RegisterCommands()
    {
       // register the exit command
-      ExitCommand exitCommand = new ExitCommand(consoleCommandHandler, tcpServer, tcpListener, heartbeatManager);
-      consoleCommandHandler.RegisterCommand(exitCommand.getIdentifier(), exitCommand);
+      ExitCommand exitCommand = new ExitCommand(consoleCommandHandler,
+               tcpServer, tcpListener, heartbeatManager);
+      consoleCommandHandler.RegisterCommand(exitCommand.getIdentifier(),
+               exitCommand);
    }
 }

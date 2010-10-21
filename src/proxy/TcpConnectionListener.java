@@ -8,6 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import common.InitFailedException;
+
 import protocols.MessageFileProtocol;
 import proxy.serverHandling.ServerManager;
 import proxy.userHandling.UserManager;
@@ -96,6 +98,11 @@ public class TcpConnectionListener implements Runnable
             // handle connection communication in a separate thread
             threadPool.execute(new TcpConnectionHandler(connection,
                      userManager, serverManager, this));
+         }
+         catch (InitFailedException e)
+         {
+            System.out
+            .println("<TcpConnectionListener Thread>: Failed to get inbound TCP connection socket!");
          }
          catch (IOException e)
          {

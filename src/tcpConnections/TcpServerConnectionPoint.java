@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import common.InitFailedException;
+
 /**
  * Encapsulates a TCP server socket.
  * 
@@ -20,8 +22,11 @@ public class TcpServerConnectionPoint
     * Initializes this connection point
     * 
     * @param port TCP port to listen on.
+    * 
+    * @throws InitFailedException Gets thrown when this connection point
+    *                             fails to initialize.
     */
-   public TcpServerConnectionPoint(int port)
+   public TcpServerConnectionPoint(int port) throws InitFailedException
    {
       try
       {
@@ -31,7 +36,7 @@ public class TcpServerConnectionPoint
       {
          System.out.println("Could not get I/O on TCP port " + port + "!");
          StopListening();
-         System.exit(1);
+         throw new InitFailedException();
       }
       
       System.out.println("Listening on TCP port " + port + "!");

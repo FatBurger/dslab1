@@ -1,5 +1,7 @@
 package client;
 
+import common.InitFailedException;
+
 /**
  * Parses command line arguments for the client.
  * 
@@ -27,8 +29,10 @@ public class Arguments
     * Parses the given arguments.
     * 
     * @param arguments The argument array.
+    * 
+    * @throws InitFailedException Exception when arguments cannot be parsed.
     */
-   public Arguments(String[] arguments)
+   public Arguments(String[] arguments) throws InitFailedException
    {
       // validate command line arguments
       if (arguments == null || arguments.length != 3)
@@ -56,11 +60,13 @@ public class Arguments
    
    /**
     * Prints out a usage message and terminates the program.
+    * 
+    * @throws InitFailedException Exception when arguments cannot be parsed.
     */
-   private void Usage()
+   private void Usage() throws InitFailedException
    {
       System.out.println("Usage: FDS_Client <downloadDir> <proxyHost> <proxyTCPPort>");
-      System.exit(1);
+      throw new InitFailedException();
    }
    
    /**

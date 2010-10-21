@@ -1,5 +1,7 @@
 package proxy;
 
+import common.InitFailedException;
+
 /**
  * Parses command line arguments for the proxy.
  * 
@@ -32,8 +34,11 @@ public class Arguments
     * Parses the given arguments.
     * 
     * @param arguments The argument array.
+    * 
+    * @throws InitFailedException Exception that gets thrown when the arguments
+    *                             cannot be parsed.
     */
-   public Arguments(String[] arguments)
+   public Arguments(String[] arguments) throws InitFailedException
    {
       // validate command line arguments
       if (arguments == null || arguments.length != 4)
@@ -62,11 +67,14 @@ public class Arguments
    
    /**
     * Prints out a usage message and terminates the program.
+    * 
+    * @throws InitFailedException Exception that gets thrown when the arguments
+    *                             cannot be parsed.
     */
-   private void Usage()
+   private void Usage() throws InitFailedException
    {
       System.out.println("Usage: FDS_Proxy <tcpPort> <udpPort> <fileserverTimeout> <checkPeriod>");
-      System.exit(1);
+      throw new InitFailedException();
    }
    
    /**

@@ -6,6 +6,8 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import common.InitFailedException;
+
 import tcpConnections.TcpConnection;
 
 /**
@@ -33,8 +35,10 @@ public class UserManager
    /**
     * Creates a new UserManager.
     * 
+    * @throws InitFailedException Exception that gets thrown when the
+    *                             user.properties file cannot be located.
     */
-   public UserManager()
+   public UserManager() throws InitFailedException
    {
       LoadPropertiesFile();
    }
@@ -98,8 +102,11 @@ public class UserManager
 
    /**
     * Loads the properties file.
+    * 
+    * @throws InitFailedException Exception that gets thrown when the
+    *                             user.properties file cannot be located.
     */
-   private void LoadPropertiesFile()
+   private void LoadPropertiesFile() throws InitFailedException
    {
       try
       {
@@ -119,20 +126,20 @@ public class UserManager
          {
             System.out.println("Could not find config file: " + CONFIG_FILE
                      + " !");
-            System.exit(1);
+            throw new InitFailedException();
          }
       }
       catch (FileNotFoundException e)
       {
          System.out
                   .println("Could not find config file: " + CONFIG_FILE + " !");
-         System.exit(1);
+         throw new InitFailedException();
       }
       catch (IOException e)
       {
          System.out.println("IO error reading from config file: " + CONFIG_FILE
                   + " !");
-         System.exit(1);
+         throw new InitFailedException();
       }
    }
 
