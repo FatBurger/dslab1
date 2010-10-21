@@ -67,7 +67,7 @@ public class ExitCommand implements ICommand
          // stop command handling and close the server port as well
          // as all open client connections
          listener.CloseAllConnections();
-         connection.StopListening();
+         connection.CloseServerSocket();
          heartbeatManager.StopAliveMessages();
          commandHandler.StopListening();
          System.out.println("Exit success!");

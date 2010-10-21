@@ -43,7 +43,7 @@ public class UdpServerConnectionPoint
       catch (IOException e)
       {
          System.out.println("Could not get I/O on UDP port " + port + "!");
-         StopListening();
+         CloseServerSocket();
          throw new InitFailedException();
       }
 
@@ -53,7 +53,7 @@ public class UdpServerConnectionPoint
    /**
     * Stops listening for new connections.
     */
-   public void StopListening()
+   public void CloseServerSocket()
    {
       if (serverSocket != null && !serverSocket.isClosed())
       {

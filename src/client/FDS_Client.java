@@ -48,6 +48,11 @@ public class FDS_Client
       {
          System.out.println("Client initialization failed - terminating!");
       }
+      finally
+      {
+         connection.Disconnect();
+         commandHandler.StopListening();
+      }
    }
 
    /**

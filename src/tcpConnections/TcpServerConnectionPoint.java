@@ -35,7 +35,7 @@ public class TcpServerConnectionPoint
       catch (IOException e)
       {
          System.out.println("Could not get I/O on TCP port " + port + "!");
-         StopListening();
+         CloseServerSocket();
          throw new InitFailedException();
       }
       
@@ -45,7 +45,7 @@ public class TcpServerConnectionPoint
    /**
     * Stops listening for new connections.
     */
-   public void StopListening()
+   public void CloseServerSocket()
    {
       try
       {

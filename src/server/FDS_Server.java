@@ -81,6 +81,13 @@ public class FDS_Server
       {
          System.out.println("Fileserver initialization failed - terminating!");
       }
+      finally
+      {
+         tcpServer.CloseServerSocket();
+         tcpListener.CloseAllConnections();
+         heartbeatManager.StopAliveMessages();
+         consoleCommandHandler.StopListening();
+      }
    }
 
    /**

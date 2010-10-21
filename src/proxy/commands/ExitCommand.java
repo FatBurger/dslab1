@@ -1,6 +1,7 @@
 package proxy.commands;
 
 import proxy.TcpConnectionListener;
+import proxy.UdpPacketListener;
 import proxy.UdpServerConnectionPoint;
 import proxy.serverHandling.ServerManager;
 import tcpConnections.TcpServerConnectionPoint;
@@ -33,6 +34,11 @@ public class ExitCommand implements ICommand
     * TCP connection listener reference.
     */
    private final TcpConnectionListener tcpListener;
+   
+   /**
+    * UDP packet listener reference.
+    */
+   private final UdpPacketListener udpListener;
 
    /**
     * The UDP connection point
@@ -56,17 +62,20 @@ public class ExitCommand implements ICommand
     * @param listener
     *           TCP connection listeners, provides a method to close all active
     *           client connections.
+    * @param udpListener UDP packet listener reference.
     * @param serverManager Server manager reference, used to stop the recurring timertask.
     */
    public ExitCommand(ICommandHandler commandHandler,
             TcpServerConnectionPoint connection,
             TcpConnectionListener listener,
+            UdpPacketListener udpListener,
             UdpServerConnectionPoint udpConnectionPoint,
             ServerManager serverManager)
    {
       this.commandHandler = commandHandler;
       this.connection = connection;
       this.tcpListener = listener;
+      this.udpListener = udpListener;
       this.udpConnectionPoint = udpConnectionPoint;
       this.serverManager = serverManager;
    }
@@ -82,8 +91,9 @@ public class ExitCommand implements ICommand
          // as all open client connections
          tcpListener.CloseAllConnections();
          commandHandler.StopListening();
-         connection.StopListening();
-         udpConnectionPoint.StopListening();
+         connection.CloseServerSocket();
+         udpConnectionPoint.CloseServerSocket();
+         udpListener.StopListening();
          serverManager.StopOnlineCheck();
          System.out.println("Exit success!");
       }

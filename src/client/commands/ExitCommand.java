@@ -74,8 +74,8 @@ public class ExitCommand implements ICommand
          SendExitMessage();
          
          // now stop command handling and close the proxy connection
-         commandHandler.StopListening();
          connection.Disconnect();
+         commandHandler.StopListening();
          System.out.println("Exit success!");
       }
       else

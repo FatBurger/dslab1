@@ -94,6 +94,15 @@ public class FDS_Proxy
       {
          System.out.println("Proxy initialization failed - terminating!");
       }
+      finally
+      {
+         serverManager.StopOnlineCheck();
+         tcpServer.CloseServerSocket();
+         tcpListener.CloseAllConnections();
+         udpServer.CloseServerSocket();
+         udpListener.StopListening();
+         consoleCommandHandler.StopListening();
+      }
    }
 
    /**
@@ -140,7 +149,7 @@ public class FDS_Proxy
 
       // register the exit command
       ExitCommand exitCommand = new ExitCommand(consoleCommandHandler,
-               tcpServer, tcpListener, udpServer, serverManager);
+               tcpServer, tcpListener, udpListener, udpServer, serverManager);
       consoleCommandHandler.RegisterCommand(exitCommand.getIdentifier(),
                exitCommand);
    }

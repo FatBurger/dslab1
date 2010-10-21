@@ -26,7 +26,7 @@ public class UdpPacketListener implements Runnable
    /**
     * Thread pool that provides threads that run incoming requests.
     */
-   private final ExecutorService threadPool = Executors.newCachedThreadPool();;
+   private final ExecutorService threadPool = Executors.newCachedThreadPool();
 
    /**
     * Indicates if this instance is currently running.
@@ -69,10 +69,19 @@ public class UdpPacketListener implements Runnable
          {
             isRunning = false;
             threadPool.shutdown();
-            connection.StopListening();
+            connection.CloseServerSocket();
             System.out.println("<UdpPacketListener Thread>: Server socket was closed, terminating!");
          }
       }
-      
+   }
+   
+   /**
+    * Stops listening to new UDP packets.
+    */
+   public void StopListening()
+   {
+      isRunning = false;
+      threadPool.shutdown();
+      connection.CloseServerSocket();
    }
 }
