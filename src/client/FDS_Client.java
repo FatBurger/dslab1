@@ -32,14 +32,14 @@ public class FDS_Client
       try
       {
          Arguments parsedArguments = new Arguments(args);
-         
+
          // initialize the proxy connection with values arguments
          connection = new ProxyConnection(parsedArguments.getHostname(),
                   parsedArguments.getPort());
-         
+
          // start listening for messages from the proxy
          StartProxyListener(parsedArguments.getDownloadDir());
-         
+
          // register known console commands and start command handling
          RegisterCommands();
          commandHandler.StartListening();
@@ -50,8 +50,15 @@ public class FDS_Client
       }
       finally
       {
-         connection.Disconnect();
-         commandHandler.StopListening();
+         if (connection != null)
+         {
+            connection.Disconnect();
+         }
+
+         if (commandHandler != null)
+         {
+            commandHandler.StopListening();
+         }
       }
    }
 

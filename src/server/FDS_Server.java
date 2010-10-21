@@ -83,10 +83,25 @@ public class FDS_Server
       }
       finally
       {
-         tcpServer.CloseServerSocket();
-         tcpListener.CloseAllConnections();
-         heartbeatManager.StopAliveMessages();
-         consoleCommandHandler.StopListening();
+         if (tcpServer != null)
+         {
+            tcpServer.CloseServerSocket();
+         }
+
+         if (tcpListener != null)
+         {
+            tcpListener.CloseAllConnections();
+         }
+
+         if (heartbeatManager != null)
+         {
+            heartbeatManager.StopAliveMessages();
+         }
+
+         if (consoleCommandHandler != null)
+         {
+            consoleCommandHandler.StopListening();
+         }
       }
    }
 

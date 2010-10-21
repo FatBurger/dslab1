@@ -96,12 +96,35 @@ public class FDS_Proxy
       }
       finally
       {
-         serverManager.StopOnlineCheck();
-         tcpServer.CloseServerSocket();
-         tcpListener.CloseAllConnections();
-         udpServer.CloseServerSocket();
-         udpListener.StopListening();
-         consoleCommandHandler.StopListening();
+         if (serverManager != null)
+         {
+            serverManager.StopOnlineCheck();
+         }
+
+         if (tcpServer != null)
+         {
+            tcpServer.CloseServerSocket();
+         }
+
+         if (tcpListener != null)
+         {
+            tcpListener.CloseAllConnections();
+         }
+
+         if (udpServer != null)
+         {
+            udpServer.CloseServerSocket();
+         }
+
+         if (udpListener != null)
+         {
+            udpListener.StopListening();
+         }
+
+         if (consoleCommandHandler != null)
+         {
+            consoleCommandHandler.StopListening();
+         }
       }
    }
 
